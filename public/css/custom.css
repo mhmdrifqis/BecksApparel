@@ -1,0 +1,45 @@
+/* Custom site styles extracted from Blade templates */
+
+/* Typography helpers */
+body { font-family: 'Inter', sans-serif; }
+h1, h2, h3, .font-display { font-family: 'Montserrat', sans-serif; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #020617; }
+::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #1e293b, #a3e635); border-radius: 5px; }
+
+/* Glass Effect Utility */
+.glass {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Text Gradient */
+.text-gradient {
+    background: linear-gradient(to right, #a3e635, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Login-specific styles (modal/backdrop) */
+body.login-backdrop {
+    background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80');
+    background-size: cover;
+    background-position: center;
+}
+.backdrop-overlay { background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(8px); }
+.glass-panel {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
