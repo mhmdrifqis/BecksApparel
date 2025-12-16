@@ -31,7 +31,7 @@
             return {
                 activeTab: 'home',
                 menuItems: [
-                    { id: 'home', label: 'Beranda', icon: 'layout-dashboard' },
+                    { id: 'home', label: 'Dashboard', icon: 'layout-dashboard' },
                     { id: 'design', label: 'Studio Desain', icon: 'palette' },
                     { id: 'orders', label: 'Pesanan Saya', icon: 'shopping-bag' },
                     { id: 'settings', label: 'Pengaturan', icon: 'settings' }
@@ -144,10 +144,13 @@
             </nav>
 
             <div class="p-4 border-t border-slate-800">
-                <a href="{{ route('login') }}" class="flex items-center gap-3 w-full p-3 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition">
-                    <i data-lucide="log-out" width="20"></i>
-                    <span x-show="sidebarOpen">Keluar</span>
-                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="flex items-center gap-3 w-full p-3 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition">
+                        <i data-lucide="log-out" width="20"></i>
+                        <span x-show="sidebarOpen">Keluar</span>
+                    </button>
+                </form>
             </div>
         </aside>
 
@@ -160,13 +163,15 @@
                     <img src="{{ asset('images/Logo-Becks-Crop.png') }}" class="w-8 h-8" alt="Logo" onerror="this.src='https://via.placeholder.com/32'">
                 </div>
                 
-                <h2 class="text-xl font-bold text-white hidden md:block" x-text="menuItems.find(i => i.id === activeTab)?.label || 'Menu'"></h2>
+                <h2 class="text-xl font-bold text-white hidden md:block" x-text="activeTab === 'dashboard' ? 'Dashboard' : (menuItems.find(i => i.id === activeTab)?.label || 'Menu')"></h2>
 
                 <div class="flex items-center gap-6">
                     <div class="relative cursor-pointer">
                         <i data-lucide="bell" class="text-slate-400 hover:text-white transition"></i>
                         <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                     </div>
+                    <!-- Link to landing page (preserve session) -->
+                    <a href="{{ route('home') }}" class="hidden md:inline-block bg-lime-400 text-navy-950 px-3 py-2 rounded-md font-bold hover:brightness-95 transition">HOME</a>
                     <div class="flex items-center gap-3 pl-6 border-l border-slate-700">
                         <div class="text-right hidden sm:block">
                             <p class="text-sm font-bold text-white">Alfi Ardiansyah</p>

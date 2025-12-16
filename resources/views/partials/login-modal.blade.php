@@ -41,12 +41,14 @@
                     </template>
                 </div>
 
-                <form @submit.prevent="handleLogin" class="space-y-5">
+                <form method="POST" action="{{ route('login.attempt') }}" class="space-y-5">
+                    @csrf
+                    <input type="hidden" name="role" :value="activeRole" />
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-2 uppercase">Email Address</label>
                         <div class="relative group">
                             <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-lime-400 transition" width="18"></i>
-                            <input type="email" x-model="email" 
+                            <input type="email" name="email" x-model="email" required
                                 class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition" 
                                 placeholder="Ketikan email anda...">
                         </div>
@@ -59,7 +61,7 @@
                         </div>
                         <div class="relative group">
                             <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-lime-400 transition" width="18"></i>
-                            <input type="password" x-model="password"
+                            <input type="password" name="password" x-model="password" required
                                 class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition"
                                 placeholder="••••••••">
                         </div>

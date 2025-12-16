@@ -21,8 +21,17 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
+// POST: attempt login (simple session-based demo)
+Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login.attempt');
+
 // 3. Dashboard Pelanggan
 Route::get('/customer/dashboard', function () {
+    // Simple session-based protection: redirect to login if not a customer
+    $user = session('user');
+    if (!$user || ($user['role'] ?? '') !== 'customer') {
+        return redirect()->route('login');
+    }
+
     // Sample demo data for the customer dashboard — replace with real queries later
     $orders = [
         [
@@ -65,3 +74,11 @@ Route::get('/admin/dashboard', function () {
 Route::get('/features/ai-design', function () {
     return view('features.ai-design');
 })->name('ai.design');
+
+// POST: logout (clears demo session)
+Route::post('/logout', function () {
+    session()->forget('user');
+    session()->invalidate();
+    session()->regenerateToken();
+    return redirect()->route('home');
+})->name('logout');
