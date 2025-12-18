@@ -23,7 +23,7 @@
 
                     <h1 class="text-3xl font-black text-white mb-2 leading-tight">
                         Selamat Datang,<br>
-                        <span x-text="roles[activeRole].label" class="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-green-400"></span>
+                        <span x-text="roles[activeRole].label" class="text-transparent bg-clip-text bg-linear-to-r from-lime-400 to-green-400"></span>
                     </h1>
                     <p class="text-slate-400 text-sm">Silakan masukkan kredensial akun Anda.</p>
                 </div>
@@ -80,7 +80,7 @@
                 <div class="absolute inset-0">
                     <img src="https://i.pinimg.com/1200x/15/23/05/15230562cbe539dfcabd0bcc87e1a37d.jpg" 
                          class="w-full h-full object-cover opacity-50 mix-blend-overlay">
-                    <div class="absolute inset-0 bg-gradient-to-t from-navy-900 via-transparent to-transparent"></div>
+                    <div class="absolute inset-0 bg-linear-to-t from-navy-900 via-transparent to-transparent"></div>
                 </div>
 
                 <div class="relative z-10 flex-1 flex flex-col justify-between p-12">
@@ -94,7 +94,7 @@
                     <div>
                         <h2 class="text-3xl font-black text-white mb-4 leading-tight">
                             "Desain Jersey<br>
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-green-400">Semudah Bermain Game."</span>
+                            <span class="text-transparent bg-clip-text bg-linear-to-r from-lime-400 to-green-400">Semudah Bermain Game."</span>
                         </h2>
                         <p class="text-slate-400 text-sm leading-relaxed mb-8">
                             Bergabunglah dengan ribuan tim yang telah mempercayakan identitas visual mereka pada teknologi manufaktur digital kami.

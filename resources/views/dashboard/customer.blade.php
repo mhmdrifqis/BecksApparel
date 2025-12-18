@@ -190,7 +190,7 @@
                 <!-- TAB: BERANDA -->
                 <div x-show="activeTab === 'home'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
                     <!-- Hero Banner -->
-                    <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-lime-500 to-emerald-600 p-8 md:p-12 mb-8 shadow-2xl">
+                    <div class="relative rounded-3xl overflow-hidden bg-linear-to-r from-lime-500 to-emerald-600 p-8 md:p-12 mb-8 shadow-2xl">
                         <div class="relative z-10 max-w-2xl">
                             <span class="bg-black/20 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block">Selamat Datang Kembali</span>
                             <h1 class="text-4xl md:text-5xl font-black text-white mb-4 italic">WUJUDKAN IDENTITAS TIM KAMU.</h1>

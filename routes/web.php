@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController; 
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,3 +83,23 @@ Route::post('/logout', function () {
     session()->regenerateToken();
     return redirect()->route('home');
 })->name('logout');
+
+//--alfi
+
+// Gallery
+Route::get('/gallery', function () {
+    $path = public_path('images/gallery');
+
+    $files = File::exists($path) ? File::files($path) : [];
+
+    $allowedExt = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
+    $images = [];
+    foreach ($files as $file) {
+        $ext = strtolower($file->getExtension());
+        if (in_array($ext, $allowedExt, true)) {
+            $images[] = asset('images/gallery/' . $file->getFilename());
+        }
+    }
+
+    return view('dashboard.gallery', compact('images'));
+})->name('gallery');
