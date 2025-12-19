@@ -103,3 +103,19 @@ Route::get('/gallery', function () {
 
     return view('dashboard.gallery', compact('images'));
 })->name('gallery');
+
+// --Alfred
+// About Us Page
+Route::get('/about-us', function () {
+    return view('about-us');
+})->name('about.us');
+
+// FAQ Page
+Route::get('/faq', function () {
+    return view('faq');
+})->name('faq');
+
+// Terms and Conditions Page
+Route::get('/terms-and-conditions', function () {
+    return view('terms');
+})->name('terms.conditions');

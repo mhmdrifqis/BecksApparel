@@ -22,6 +22,7 @@
                     },
                     backgroundImage: {
                         'hero-pattern': "url('https://www.transparenttextures.com/patterns/cubes.png')",
+                        'gradient': 'linear-gradient(135deg, #a3e635 0%, #06b6d4 100%)',
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
@@ -32,6 +33,9 @@
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-20px)' },
                         }
+                    },
+                    textColor: {
+                        'gradient': 'transparent',
                     }
                 }
             }

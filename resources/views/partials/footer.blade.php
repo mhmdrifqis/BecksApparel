@@ -29,6 +29,9 @@
                     <h4 class="text-white font-bold uppercase tracking-widest mb-8">Menu</h4>
                     <ul class="space-y-4 text-slate-400">
                         <li><a href="#" class="hover:text-lime-400 transition">Beranda</a></li>
+                        <li><a href="{{ route('about.us') }}" class="hover:text-lime-400 transition">About Us</a></li>
+                        <li><a href="{{ route('faq') }}" class="hover:text-lime-400 transition">FAQ</a></li>
+                        <li><a href="{{ route('terms.conditions') }}" class="hover:text-lime-400 transition">Terms and Conditions</a></li>
                         <li><a href="#" class="hover:text-lime-400 transition">Studio Desain</a></li>
                         <li><a href="#" class="hover:text-lime-400 transition">Katalog</a></li>
                         <li><a href="#" class="hover:text-lime-400 transition">Tracking Order</a></li>
