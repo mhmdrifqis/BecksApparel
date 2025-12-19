@@ -17,7 +17,7 @@
 
                 <!-- Desktop Menu -->
                 <div class="hidden lg:flex items-center space-x-10" data-aos="fade-down" data-aos-delay="100">
-                    <a href="#home" class="text-sm font-bold text-white hover:text-lime-400 transition tracking-wide">HOME</a>
+                    <a href="/" class="text-sm font-bold text-white hover:text-lime-400 transition tracking-wide">HOME</a>
                     <a href="/gallery" class="text-sm font-bold text-white hover:text-lime-400 transition tracking-wide">GALLERY</a>
                     <a href="#features" class="text-sm font-bold text-white hover:text-lime-400 transition tracking-wide">FITUR</a>
                     <a href="#process" class="text-sm font-bold text-white hover:text-lime-400 transition tracking-wide">CARA KERJA</a>
@@ -38,8 +38,8 @@
                         <a href="#" @click.prevent="openLogin" class="text-sm font-bold text-white hover:text-lime-400 transition cursor-pointer">LOGIN</a>
                     @endif
 
-                    <a href="#" class="relative group px-8 py-3 bg-transparent overflow-hidden rounded-full">
-                        <span class="absolute inset-0 w-full h-full bg-gradient-to-br from-lime-400 to-lime-600 group-hover:from-lime-500 group-hover:to-lime-700 transition-all duration-300"></span>
+                    <a href="/features/ai-design" class="relative group px-8 py-3 bg-transparent overflow-hidden rounded-full">
+                        <span class="absolute inset-0 w-full h-full bg-linear-to-br from-lime-400 to-lime-600 group-hover:from-lime-500 group-hover:to-lime-700 transition-all duration-300"></span>
                         <span class="relative text-navy-950 font-black tracking-wide flex items-center gap-2">
                             MULAI DESAIN <i data-lucide="arrow-right" width="18"></i>
                         </span>
@@ -64,7 +64,7 @@
                 <a href="#features" class="block text-slate-400 font-bold text-lg">FITUR</a>
                 <a href="#process" class="block text-slate-400 font-bold text-lg">CARA KERJA</a>
                 <a href="#catalog" class="block text-slate-400 font-bold text-lg">KATALOG</a>
-                <a href="#" class="block w-full text-center mt-8 bg-lime-400 text-navy-950 py-4 rounded-xl font-black text-xl">BUAT CUSTOM SEKARANG</a>
+                <a href="/design" class="block w-full text-center mt-8 bg-lime-400 text-navy-950 py-4 rounded-xl font-black text-xl">BUAT CUSTOM SEKARANG</a>
             </div>
         </div>
     </nav>
