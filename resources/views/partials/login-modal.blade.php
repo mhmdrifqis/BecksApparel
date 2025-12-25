@@ -22,49 +22,67 @@
                     </div>
 
                     <h1 class="text-3xl font-black text-white mb-2 leading-tight">
-                        Selamat Datang,<br>
-                        <span x-text="roles[activeRole].label" class="text-transparent bg-clip-text bg-linear-to-r from-lime-400 to-green-400"></span>
+                        Selamat Datang Kembali
                     </h1>
-                    <p class="text-slate-400 text-sm">Silakan masukkan kredensial akun Anda.</p>
+                    <p class="text-slate-400 text-sm">Silakan masukkan kredensial akun Anda untuk melanjutkan.</p>
                 </div>
 
-                <p class="text-xs font-bold text-slate-500 uppercase mb-3">Pilih Peran (Ubah Tipe Login)</p>
-                <div class="grid grid-cols-3 gap-3 mb-8">
-                    <template x-for="(role, key) in roles" :key="key">
-                        <button 
-                            @click="setRole(key)"
-                            :class="activeRole === key ? 'border-lime-400 bg-lime-400/10 text-white' : 'border-slate-800 bg-slate-900/50 text-slate-500 hover:border-slate-600'"
-                            class="flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-300 hover:bg-slate-800">
-                            <i :data-lucide="role.icon" :class="activeRole === key ? 'text-lime-400' : 'text-slate-500'" width="20" class="mb-2"></i>
-                            <span class="text-[10px] font-bold uppercase tracking-wide" x-text="role.shortName"></span>
-                        </button>
-                    </template>
-                </div>
-
-                <form method="POST" action="{{ route('login.attempt') }}" class="space-y-5">
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
                     @csrf
-                    <input type="hidden" name="role" :value="activeRole" />
+                    
+                    <!-- Session Status -->
+                    @if(session('status'))
+                        <div class="mb-4 text-sm text-lime-400 bg-lime-400/10 border border-lime-400/30 rounded-xl p-3">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    <!-- Validation Errors -->
+                    @if($errors->any())
+                        <div class="mb-4 text-sm text-red-400 bg-red-400/10 border border-red-400/30 rounded-xl p-3">
+                            <ul class="list-disc list-inside space-y-1">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-2 uppercase">Email Address</label>
                         <div class="relative group">
                             <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-lime-400 transition" width="18"></i>
-                            <input type="email" name="email" x-model="email" required
-                                class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition" 
+                            <input type="email" name="email" value="{{ old('email') }}" required autofocus
+                                class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition @error('email') border-red-400 @enderror" 
                                 placeholder="Ketikan email anda...">
                         </div>
+                        @error('email')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <label class="block text-xs font-bold text-slate-300 uppercase">Password</label>
-                            <a href="#" class="text-xs text-lime-400 hover:underline">Lupa password?</a>
+                            @if (Route::has('password.request'))
+                                <a href="{{ route('password.request') }}" class="text-xs text-lime-400 hover:underline">Lupa password?</a>
+                            @endif
                         </div>
                         <div class="relative group">
                             <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-lime-400 transition" width="18"></i>
-                            <input type="password" name="password" x-model="password" required
-                                class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition"
+                            <input type="password" name="password" required autocomplete="current-password"
+                                class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition @error('password') border-red-400 @enderror"
                                 placeholder="••••••••">
                         </div>
+                        @error('password')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="flex items-center">
+                        <input id="remember_me_modal" type="checkbox" name="remember" class="rounded bg-navy-900 border-slate-700 text-lime-400 focus:ring-lime-400 focus:ring-offset-navy-900">
+                        <label for="remember_me_modal" class="ml-2 text-sm text-slate-400">Ingat saya</label>
                     </div>
 
                     <button type="submit" 
@@ -72,6 +90,13 @@
                         <span>MASUK SEKARANG</span>
                         <i data-lucide="arrow-right" width="20"></i>
                     </button>
+
+                    <div class="text-center mt-4">
+                        <p class="text-sm text-slate-400">
+                            Belum punya akun? 
+                            <a href="{{ route('register') }}" class="text-lime-400 hover:text-lime-500 font-bold underline">Daftar sekarang</a>
+                        </p>
+                    </div>
                 </form>
             </div>
 

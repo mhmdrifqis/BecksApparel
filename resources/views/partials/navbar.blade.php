@@ -26,17 +26,25 @@
 
                 <!-- CTA Button -->
                <div class="hidden lg:flex items-center gap-6" data-aos="fade-left">
-                    @if(session('user'))
-                        @php $role = session('user.role') ?? null; @endphp
-                        <span class="text-sm font-bold text-white">Hi, {{ session('user.name') }}</span>
-                        <a href="{{ $role === 'customer' ? route('customer.dashboard') : ($role === 'production' ? route('production.dashboard') : route('admin.dashboard')) }}" class="text-sm font-bold text-white hover:text-lime-400 transition">DASHBOARD</a>
+                    @auth
+                        <span class="text-sm font-bold text-white">Hi, {{ Auth::user()->name }}</span>
+                        
+                        @if(auth()->user()->isAdmin() || auth()->user()->isPimpinan())
+                            <a href="{{ route('admin.users.index') }}" class="text-sm font-bold text-white hover:text-lime-400 transition">USER MANAGEMENT</a>
+                        @endif
+                        
+                        @if(auth()->user()->isPelanggan())
+                            <a href="{{ route('dashboard') }}" class="text-sm font-bold text-white hover:text-lime-400 transition">DASHBOARD</a>
+                        @endif
+                        
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button type="submit" class="text-sm font-bold text-white hover:text-red-400 transition">LOGOUT</button>
                         </form>
                     @else
-                        <a href="#" @click.prevent="openLogin" class="text-sm font-bold text-white hover:text-lime-400 transition cursor-pointer">LOGIN</a>
-                    @endif
+                        <a href="{{ route('login') }}" class="text-sm font-bold text-white hover:text-lime-400 transition cursor-pointer">LOGIN</a>
+                        <a href="{{ route('register') }}" class="text-sm font-bold text-white hover:text-lime-400 transition cursor-pointer">REGISTER</a>
+                    @endauth
 
                     <a href="/features/ai-design" class="relative group px-8 py-3 bg-transparent overflow-hidden rounded-full">
                         <span class="absolute inset-0 w-full h-full bg-linear-to-br from-lime-400 to-lime-600 group-hover:from-lime-500 group-hover:to-lime-700 transition-all duration-300"></span>

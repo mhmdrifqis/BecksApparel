@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
+<html lang="id">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Becks Apparel - @yield('title')</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title', 'Becks Apparel - The Future of Custom Sportswear')</title>
+    
+    <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/Logo-Becks-Crop.png') }}" type="image/png">
 
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -13,63 +17,71 @@
                 extend: {
                     colors: {
                         navy: { 950: '#020617', 900: '#0f172a', 800: '#1e293b' },
-                        lime: { 400: '#a3e635', 500: '#84cc16', 600: '#65a30d' },
-                        accent: { cyan: '#06b6d4', purple: '#8b5cf6' }
+                        lime: { 400: '#a3e635', 500: '#84cc16' },
+                        'accent-cyan': '#06b6d4',
+                        'accent-purple': '#a855f7'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         display: ['Montserrat', 'sans-serif'],
                     },
-                    backgroundImage: {
-                        'hero-pattern': "url('https://www.transparenttextures.com/patterns/cubes.png')",
-                        'gradient': 'linear-gradient(135deg, #a3e635 0%, #06b6d4 100%)',
-                    },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
+                        'fadeIn': 'fadeIn 0.5s ease-out forwards',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
                         }
                     },
-                    textColor: {
-                        'gradient': 'transparent',
+                    backgroundImage: {
+                        'hero-pattern': "url('https://www.transparenttextures.com/patterns/carbon-fibre.png')",
+                        'linear-to-br': 'linear-gradient(to bottom right, var(--tw-gradient-stops))',
+                        'linear-to-r': 'linear-gradient(to right, var(--tw-gradient-stops))',
+                        'linear-to-t': 'linear-gradient(to top, var(--tw-gradient-stops))',
+                        'linear-to-tr': 'linear-gradient(to top right, var(--tw-gradient-stops))',
                     }
                 }
             }
         }
     </script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:ital,wght@0,700;0,900;1,900&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-
+    
+    <!-- Project styles -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+
+    <!-- Alpine.js -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="{{ asset('js/login-app.js') }}"></script>
-    @stack('styles')
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({ duration: 800, once: true });
+            if (window.lucide) window.lucide.createIcons();
+        });
+    </script>
 </head>
-<body x-data="loginApp()" class="bg-navy-950 text-slate-200 antialiased overflow-x-hidden selection:bg-lime-400 selection:text-navy-950">
-
+<body class="font-sans antialiased bg-navy-950" x-data="loginApp()">
     @include('partials.navbar')
-
+    
     <main>
         @yield('content')
     </main>
-
+    
     @include('partials.footer')
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        lucide.createIcons();
-        AOS.init({ duration: 800, once: true, offset: 100 });
-    </script>
     
     @include('partials.login-modal')
-    @stack('scripts')
 </body>
 </html>

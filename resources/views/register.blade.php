@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Becks Apparel</title>
+    <title>Register - Becks Apparel</title>
     
     <!-- 1. Favicon -->
     <link rel="icon" href="{{ asset('images/Logo-Becks-Crop.png') }}" type="image/png">
@@ -50,8 +50,6 @@
 
     <!-- 5. Alpine.js -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!-- Login app script (centralized) -->
-    <script src="{{ asset('js/login-app.js') }}"></script>
 </head>
 <body class="font-sans antialiased h-screen overflow-hidden">
 
@@ -69,7 +67,7 @@
         <!-- MODAL CARD -->
         <div class="w-full max-w-5xl grid lg:grid-cols-2 bg-navy-900 rounded-3xl overflow-hidden shadow-2xl border border-white/10 animate-fadeIn relative">
             
-            <!-- KIRI: FORM LOGIN -->
+            <!-- KIRI: FORM REGISTER -->
             <div class="p-8 lg:p-12 flex flex-col justify-center bg-navy-950 relative">
                 
                 <!-- Header -->
@@ -83,21 +81,14 @@
                     </div>
                     
                     <h1 class="text-3xl font-black text-white mb-2 leading-tight">
-                        Selamat Datang Kembali
+                        Buat Akun Baru
                     </h1>
-                    <p class="text-slate-400 text-sm">Silakan masukkan kredensial akun Anda untuk melanjutkan.</p>
+                    <p class="text-slate-400 text-sm">Daftarkan diri Anda untuk mulai membuat jersey impian.</p>
                 </div>
 
-                <!-- FORM INPUT MANUAL -->
-                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                <!-- FORM REGISTER -->
+                <form method="POST" action="{{ route('register') }}" class="space-y-5">
                     @csrf
-                    
-                    <!-- Session Status -->
-                    @if(session('status'))
-                        <div class="mb-4 text-sm text-lime-400 bg-lime-400/10 border border-lime-400/30 rounded-xl p-3">
-                            {{ session('status') }}
-                        </div>
-                    @endif
 
                     <!-- Validation Errors -->
                     @if($errors->any())
@@ -110,29 +101,54 @@
                         </div>
                     @endif
 
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2 uppercase">Nama Lengkap</label>
+                        <div class="relative group">
+                            <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-lime-400 transition" width="18"></i>
+                            <input type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name"
+                                class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition @error('name') border-red-400 @enderror" 
+                                placeholder="Masukkan nama lengkap...">
+                        </div>
+                        @error('name')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Email -->
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-2 uppercase">Email Address</label>
                         <div class="relative group">
                             <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-lime-400 transition" width="18"></i>
-                            <input type="email" name="email" value="{{ old('email') }}" required autofocus
+                            <input type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
                                 class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition @error('email') border-red-400 @enderror" 
-                                placeholder="Ketikan email anda...">
+                                placeholder="Masukkan email...">
                         </div>
                         @error('email')
                             <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
 
+                    <!-- Phone Number -->
                     <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="block text-xs font-bold text-slate-300 uppercase">Password</label>
-                            @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="text-xs text-lime-400 hover:underline">Lupa password?</a>
-                            @endif
+                        <label class="block text-xs font-bold text-slate-300 mb-2 uppercase">Nomor Telepon</label>
+                        <div class="relative group">
+                            <i data-lucide="phone" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-lime-400 transition" width="18"></i>
+                            <input type="tel" name="nomor_telepon" value="{{ old('nomor_telepon') }}" required autocomplete="tel" maxlength="15"
+                                class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition @error('nomor_telepon') border-red-400 @enderror" 
+                                placeholder="081234567890">
                         </div>
+                        @error('nomor_telepon')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2 uppercase">Password</label>
                         <div class="relative group">
                             <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-lime-400 transition" width="18"></i>
-                            <input type="password" name="password" required autocomplete="current-password"
+                            <input type="password" name="password" required autocomplete="new-password"
                                 class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition @error('password') border-red-400 @enderror"
                                 placeholder="••••••••">
                         </div>
@@ -141,22 +157,27 @@
                         @enderror
                     </div>
 
-                    <!-- Remember Me -->
-                    <div class="flex items-center">
-                        <input id="remember_me" type="checkbox" name="remember" class="rounded bg-navy-900 border-slate-700 text-lime-400 focus:ring-lime-400 focus:ring-offset-navy-900">
-                        <label for="remember_me" class="ml-2 text-sm text-slate-400">Ingat saya</label>
+                    <!-- Confirm Password -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2 uppercase">Konfirmasi Password</label>
+                        <div class="relative group">
+                            <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-lime-400 transition" width="18"></i>
+                            <input type="password" name="password_confirmation" required autocomplete="new-password"
+                                class="w-full bg-navy-900 border border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:border-lime-400 focus:ring-1 focus:ring-lime-400 transition"
+                                placeholder="••••••••">
+                        </div>
                     </div>
 
                     <button type="submit" 
                         class="w-full bg-lime-400 hover:bg-lime-500 text-navy-950 font-black text-lg py-4 rounded-xl shadow-lg shadow-lime-400/20 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2 mt-4">
-                        <span>MASUK SEKARANG</span>
+                        <span>DAFTAR SEKARANG</span>
                         <i data-lucide="arrow-right" width="20"></i>
                     </button>
 
                     <div class="text-center mt-4">
                         <p class="text-sm text-slate-400">
-                            Belum punya akun? 
-                            <a href="{{ route('register') }}" class="text-lime-400 hover:text-lime-500 font-bold underline">Daftar sekarang</a>
+                            Sudah punya akun? 
+                            <a href="{{ route('login') }}" class="text-lime-400 hover:text-lime-500 font-bold underline">Masuk sekarang</a>
                         </p>
                     </div>
                 </form>
@@ -181,22 +202,22 @@
 
                     <div>
                         <h2 class="text-3xl font-black text-white mb-4 leading-tight">
-                            "Desain Jersey<br>
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-green-400">Semudah Bermain Game."</span>
+                            "Bergabunglah dengan<br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-green-400">Komunitas Kreator."</span>
                         </h2>
                         <p class="text-slate-400 text-sm leading-relaxed mb-8">
-                            Bergabunglah dengan ribuan tim yang telah mempercayakan identitas visual mereka pada teknologi manufaktur digital kami.
+                            Mulai perjalanan Anda dalam menciptakan identitas visual yang unik untuk tim Anda. Daftar sekarang dan dapatkan akses ke semua fitur premium.
                         </p>
                         
                         <!-- Mini Stats -->
                         <div class="flex gap-6 border-t border-white/10 pt-6">
                             <div>
                                 <p class="text-xl font-bold text-white">12k+</p>
-                                <p class="text-xs text-slate-500 uppercase">Jersey Dicetak</p>
+                                <p class="text-xs text-slate-500 uppercase">Pengguna Aktif</p>
                             </div>
                             <div>
                                 <p class="text-xl font-bold text-white">4.9/5</p>
-                                <p class="text-xs text-slate-500 uppercase">Rating Mitra</p>
+                                <p class="text-xs text-slate-500 uppercase">Rating Kepuasan</p>
                             </div>
                         </div>
                     </div>
@@ -206,7 +227,12 @@
         </div>
     </div>
 
-    <!-- login-app.js initializes icons and handles loginApp -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.lucide) window.lucide.createIcons();
+        });
+    </script>
     
 </body>
 </html>
+

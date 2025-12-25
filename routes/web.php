@@ -17,13 +17,8 @@ use Illuminate\Support\Facades\File;
 // 1. Landing Page (PENTING: Ini yang mengirim data $products)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// 2. Halaman Login
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-
-// POST: attempt login (simple session-based demo)
-Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login.attempt');
+// Laravel Breeze Authentication Routes
+require __DIR__.'/auth.php';
 
 // 3. Dashboard Pelanggan
 Route::get('/customer/dashboard', function () {
@@ -76,13 +71,15 @@ Route::get('/features/ai-design', function () {
     return view('features.ai-design');
 })->name('ai.design');
 
-// POST: logout (clears demo session)
-Route::post('/logout', function () {
-    session()->forget('user');
-    session()->invalidate();
-    session()->regenerateToken();
-    return redirect()->route('home');
-})->name('logout');
+// Dashboard (protected by auth middleware)
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+// Admin & Pimpinan Routes - User Management
+Route::middleware(['auth', 'role:admin,pimpinan'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('users', \App\Http\Controllers\Admin\AdminUserController::class);
+});
 
 //--alfi
 
