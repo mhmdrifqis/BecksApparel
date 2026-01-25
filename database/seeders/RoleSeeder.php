@@ -17,19 +17,25 @@ class RoleSeeder extends Seeder
                 'id' => 1,
                 'name' => 'pelanggan',
                 'display_name' => 'Pelanggan',
-                'description' => 'Default role for public registration. Customers can browse, order, and track their orders.',
+                'description' => 'Pengguna akhir yang melakukan pemesanan, pembayaran, dan pelacakan order.',
             ],
             [
                 'id' => 2,
                 'name' => 'admin',
                 'display_name' => 'Admin',
-                'description' => 'System administrator with access to user management and system settings.',
+                'description' => 'Pengelola penuh sistem, manajemen user, produk, stok, dan transaksi.',
             ],
             [
                 'id' => 3,
-                'name' => 'pimpinan',
-                'display_name' => 'Pimpinan',
-                'description' => 'Highest level management access. Can manage all aspects of the system including admins.',
+                'name' => 'manajemen', // Merepresentasikan Manajemen PT Bola Media Sportainment
+                'display_name' => 'Manajemen / Pimpinan',
+                'description' => 'Akses read-only untuk monitoring data operasional, laporan keuangan, dan analitik.',
+            ],
+            [
+                'id' => 4, // ROLE BARU DITAMBAHKAN
+                'name' => 'produksi',
+                'display_name' => 'Tim Produksi',
+                'description' => 'Bertanggung jawab memproses pesanan (Cetak -> Jahit -> QC -> Siap Kirim) dan update status produksi.',
             ],
         ];
 
@@ -41,4 +47,3 @@ class RoleSeeder extends Seeder
         }
     }
 }
-

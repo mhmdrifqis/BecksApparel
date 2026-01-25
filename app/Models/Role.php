@@ -38,11 +38,11 @@ class Role extends Model
     }
 
     /**
-     * Check if role is pimpinan.
+     * Check if role is manajemen.
      */
-    public function isPimpinan(): bool
+    public function isManajemen(): bool
     {
-        return $this->name === 'pimpinan';
+        return $this->name === 'manajemen';
     }
 
     /**
@@ -51,6 +51,11 @@ class Role extends Model
     public function isPelanggan(): bool
     {
         return $this->name === 'pelanggan';
+    }
+
+     public function isProduksi(): bool
+    {
+        return $this->name === 'produksi';
     }
 }
 

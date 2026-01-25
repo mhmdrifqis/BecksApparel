@@ -1,118 +1,58 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController; 
 use Illuminate\Support\Facades\File;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Di sini kita mendaftarkan semua route untuk aplikasi.
-| Pastikan Route::get('/') menggunakan [HomeController::class, 'index'].
-|
 */
 
-// 1. Landing Page (PENTING: Ini yang mengirim data $products)
+// 1. Landing Page (Home)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Laravel Breeze Authentication Routes
-require __DIR__.'/auth.php';
+// 2. Halaman Statis (Public)
+Route::view('/about-us', 'about-us')->name('about.us');
+Route::view('/faq', 'faq')->name('faq');
+Route::view('/terms-and-conditions', 'terms')->name('terms.conditions');
+Route::view('/features/ai-design', 'features.ai-design')->name('ai.design');
 
-// 3. Dashboard Pelanggan
-Route::get('/customer/dashboard', function () {
-    // Simple session-based protection: redirect to login if not a customer
-    $user = session('user');
-    if (!$user || ($user['role'] ?? '') !== 'customer') {
-        return redirect()->route('login');
-    }
-
-    // Sample demo data for the customer dashboard — replace with real queries later
-    $orders = [
-        [
-            'id' => 'ORD-1001',
-            'date' => '2025-12-01',
-            'status' => 'Selesai',
-            'total' => 125000,
-            'items' => 3
-        ],
-        [
-            'id' => 'ORD-1002',
-            'date' => '2025-12-05',
-            'status' => 'Dalam Produksi',
-            'total' => 85000,
-            'items' => 1
-        ],
-        [
-            'id' => 'ORD-1003',
-            'date' => '2025-12-10',
-            'status' => 'Menunggu Pembayaran',
-            'total' => 150000,
-            'items' => 2
-        ]
-    ];
-
-    return view('dashboard.customer', compact('orders'));
-})->name('customer.dashboard');
-
-// 4. Dashboard Produksi
-Route::get('/production/dashboard', function () {
-    return view('dashboard.production');
-})->name('production.dashboard');
-
-// 5. Dashboard Admin
-Route::get('/admin/dashboard', function () {
-    return view('dashboard.admin');
-})->name('admin.dashboard');
-
-// 6. Fitur AI Design
-Route::get('/features/ai-design', function () {
-    return view('features.ai-design');
-})->name('ai.design');
-
-// Dashboard (protected by auth middleware)
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-// Admin & Pimpinan Routes - User Management
-Route::middleware(['auth', 'role:admin,pimpinan'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('users', \App\Http\Controllers\Admin\AdminUserController::class);
-});
-
-//--alfi
-
-// Gallery
+// 3. Gallery (Public)
 Route::get('/gallery', function () {
     $path = public_path('images/gallery');
-
     $files = File::exists($path) ? File::files($path) : [];
-
     $allowedExt = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
     $images = [];
+
     foreach ($files as $file) {
-        $ext = strtolower($file->getExtension());
-        if (in_array($ext, $allowedExt, true)) {
+        if (in_array(strtolower($file->getExtension()), $allowedExt)) {
             $images[] = asset('images/gallery/' . $file->getFilename());
         }
     }
-
-    return view('dashboard.gallery', compact('images'));
+    // Pastikan view 'dashboard.gallery' diganti jika letaknya bukan di folder dashboard
+    return view('gallery', compact('images')); 
 })->name('gallery');
 
-// --Alfred
-// About Us Page
-Route::get('/about-us', function () {
-    return view('about-us');
-})->name('about.us');
 
-// FAQ Page
-Route::get('/faq', function () {
-    return view('faq');
-})->name('faq');
+// 4. Authentication Routes (Breeze)
+require __DIR__.'/auth.php';
 
-// Terms and Conditions Page
-Route::get('/terms-and-conditions', function () {
-    return view('terms');
-})->name('terms.conditions');
+
+// 5. Protected Routes (Harus Login)
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // === UTAMA: Single Dashboard Route ===
+    // Logika pemisahan Admin/Customer dipindah ke DashboardController
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // === ADMIN ONLY ===
+    // Middleware 'role' diasumsikan sudah Anda buat. Jika belum, hapus 'role:...'
+    Route::middleware(['role:admin,pimpinan'])->prefix('admin')->name('admin.')->group(function () {
+        Route::resource('users', AdminUserController::class);
+    });
+
+});

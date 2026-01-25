@@ -74,11 +74,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is pimpinan.
+     * Check if user is manajemen.
      */
-    public function isPimpinan(): bool
+    public function isManajemen(): bool
     {
-        return $this->hasRole('pimpinan');
+        return $this->hasRole('manajemen');
     }
 
     /**
@@ -87,6 +87,14 @@ class User extends Authenticatable
     public function isPelanggan(): bool
     {
         return $this->hasRole('pelanggan');
+    }
+
+    /**
+     * Cek apakah user adalah Tim Produksi.
+     */
+    public function isProduksi(): bool
+    {
+        return $this->hasRole('produksi');
     }
 
     /**

@@ -19,11 +19,9 @@
                 <div class="hidden md:flex items-center gap-4">
                     <span class="text-sm font-bold text-slate-300">Hi, {{ Auth::user()->name }}</span>
                     
-                    @if(auth()->user()->isAdmin() || auth()->user()->isPimpinan())
-                        <a href="{{ route('admin.users.index') }}" class="text-sm font-bold text-white hover:text-lime-400 transition">ADMIN</a>
-                    @elseif(auth()->user()->isPelanggan())
-                        <a href="{{ route('dashboard') }}" class="text-sm font-bold text-white hover:text-lime-400 transition">DASHBOARD</a>
-                    @endif
+                    <a href="{{ route('dashboard') }}" class="text-sm font-bold text-white hover:text-lime-400 transition">
+    DASHBOARD
+</a>
 
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
