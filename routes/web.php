@@ -53,6 +53,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Middleware 'role' diasumsikan sudah Anda buat. Jika belum, hapus 'role:...'
     Route::middleware(['role:admin,pimpinan'])->prefix('admin')->name('admin.')->group(function () {
         Route::resource('users', AdminUserController::class);
+        Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class);
+        // Admin Transaction Routes
+        Route::get('/transactions', [App\Http\Controllers\Admin\AdminTransactionController::class, 'index'])->name('admin.transactions.index');
+        Route::get('/transactions/{order}', [App\Http\Controllers\Admin\AdminTransactionController::class, 'show'])->name('admin.transactions.show');
+        Route::put('/transactions/{order}', [App\Http\Controllers\Admin\AdminTransactionController::class, 'update'])->name('admin.transactions.update');
+        
     });
 
 });

@@ -39,7 +39,7 @@
                     <a href="{{ route('home') }}" class="flex ms-2 md:me-24 items-center gap-3">
                         <div class="relative p-1 rounded-md">
                             <div class="absolute -inset-0.5 bg-lime-400 rounded-md opacity-60 blur-sm"></div>
-                            <img src="{{ asset('images/Logo-Becks-Crop.png') }}" class="h-8 me-3 relative z-10 rounded-sm" alt="Becks Logo" />
+                            <img src="{{ asset('images/Logo-Becks-Crop.png') }}" class="h-8 w-auto relative z-10 rounded-sm" alt="Becks Logo">
                         </div>
                         <span class="self-center text-xl font-black whitespace-nowrap text-white tracking-widest hidden md:block">
                             BECKS<span class="text-lime-400">APPAREL</span>
@@ -97,92 +97,290 @@
                 </li>
 
                 @if(auth()->user()->isAdmin())
+                    
                     <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
-                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Admin Area</span>
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Master Data</span>
                     </li>
+                    
                     <li>
-                        <a href="{{ route('admin.users.index') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                        <a href="{{ route('admin.users.index') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('admin.users.*') ? 'bg-navy-800 text-lime-400' : '' }}">
                             <i data-lucide="users" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
-                            <span class="flex-1 ms-3 whitespace-nowrap">User Management</span>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Manajemen User</span>
                         </a>
                     </li>
+
+                    <li>
+                        <a href="{{ route('admin.products.index') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('admin.products.*') ? 'bg-navy-800 text-lime-400' : '' }}">
+                            <i data-lucide="package" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Produk & Layanan</span>
+                        </a>
+                    </li>
+
                     <li>
                         <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
-                            <i data-lucide="package-search" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <i data-lucide="boxes" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
                             <span class="flex-1 ms-3 whitespace-nowrap">Manajemen Stok</span>
                         </a>
                     </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Operasional</span>
+                    </li>
+
+                    <li>
+                        <a href="{{ route ('admin.admin.transactions.index') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="shopping-cart" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Transaksi / Pesanan</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="factory" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Status Produksi</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="truck" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Pengiriman & Resi</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="refresh-ccw" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Pengajuan Retur</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Finance & Report</span>
+                    </li>
+
                     <li>
                         <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
                             <i data-lucide="file-text" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
-                            <span class="flex-1 ms-3 whitespace-nowrap">Invoice & Transaksi</span>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Invoice & Keuangan</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Laporan & Analitik</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="bot" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Chatbot Config</span>
                         </a>
                     </li>
                 @endif
 
                 @if(auth()->user()->isManajemen())
-                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
-                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Executive Report</span>
+
+                    <li>
+                        <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-white rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('dashboard') ? 'bg-navy-800 text-lime-400' : '' }}">
+                            <i data-lucide="pie-chart" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="ms-3">Executive Dashboard</span>
+                        </a>
                     </li>
+                    
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Keuangan & Laporan</span>
+                    </li>
+
                     <li>
                         <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
                             <i data-lucide="trending-up" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Tren Pendapatan</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="banknote" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
                             <span class="flex-1 ms-3 whitespace-nowrap">Laporan Penjualan</span>
                         </a>
                     </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Intelijen Bisnis</span>
+                    </li>
+
                     <li>
                         <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
-                            <i data-lucide="pie-chart" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
-                            <span class="flex-1 ms-3 whitespace-nowrap">Analisis Performa</span>
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Performa Produk</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="users" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Statistik Pelanggan</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Audit & Evaluasi</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="timer" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Efisiensi Produksi</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="alert-circle" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Tingkat Retur</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Akun</span>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="user" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Profil Saya</span>
                         </a>
                     </li>
                 @endif
 
                 @if(auth()->user()->isProduksi())
-                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
-                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Produksi</span>
-                    </li>
+
                     <li>
-                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
-                            <i data-lucide="list-todo" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
-                            <span class="flex-1 ms-3 whitespace-nowrap">Antrean Cetak</span>
-                            <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-bold text-navy-950 bg-red-400 rounded-full">5</span>
+                        <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-white rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('dashboard') ? 'bg-navy-800 text-lime-400' : '' }}">
+                            <i data-lucide="activity" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="ms-3">Dashboard Produksi</span>
                         </a>
                     </li>
+                    
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Tahapan Produksi</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="printer" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Antrean Cetak</span>
+                            <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-bold text-navy-950 bg-red-400 rounded-full">3</span>
+                        </a>
+                    </li>
+
                     <li>
                         <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
                             <i data-lucide="scissors" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
                             <span class="flex-1 ms-3 whitespace-nowrap">Proses Jahit</span>
                         </a>
                     </li>
+
                     <li>
                         <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
-                            <i data-lucide="check-circle" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <i data-lucide="clipboard-check" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
                             <span class="flex-1 ms-3 whitespace-nowrap">Quality Control</span>
                         </a>
                     </li>
+
                     <li>
                         <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
-                            <i data-lucide="truck" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <i data-lucide="package-check" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
                             <span class="flex-1 ms-3 whitespace-nowrap">Siap Kirim</span>
                         </a>
                     </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Inventory & Bahan</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="layers" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Stok Bahan Baku</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="box" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Stok Barang Jadi</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Akun</span>
+                    </li>
+                    
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="user" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Profil Saya</span>
+                        </a>
+                    </li>   
                 @endif
 
                 @if(auth()->user()->isPelanggan())
+                
                     <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
-                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Pelanggan Menu</span>
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Aktivitas Belanja</span>
                     </li>
+
                     <li>
                         <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
-                            <i data-lucide="shopping-cart" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
-                            <span class="flex-1 ms-3 whitespace-nowrap">Pesanan Saya</span>
+                            <i data-lucide="shopping-bag" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Katalog Produk</span>
                         </a>
                     </li>
+
                     <li>
                         <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
-                            <i data-lucide="heart" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
-                            <span class="flex-1 ms-3 whitespace-nowrap">Favorit</span>
+                            <i data-lucide="package-search" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Pesanan Saya</span>
+                            <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-bold text-navy-950 bg-lime-400 rounded-full">1</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="file-text" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Invoice & Riwayat</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Bantuan & Layanan</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="refresh-ccw" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Ajukan Retur</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="message-circle" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Pusat Bantuan</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Akun Saya</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="user-cog" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Edit Profil</span>
                         </a>
                     </li>
                 @endif
