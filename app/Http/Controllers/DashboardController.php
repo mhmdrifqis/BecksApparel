@@ -63,8 +63,8 @@ class DashboardController extends Controller
                 'data' => [800, 1200, 1500, 2100, 2500] // Dalam Juta
             ];
 
-            // Ubah view ke 'dashboard.manajemen'
-            return view('dashboard.manajemen', compact('kpi', 'revenueTrend'));
+            // Ubah view ke 'dashboard.management'
+            return view('dashboard.management', compact('kpi', 'revenueTrend'));
         }
         
         // ====================================================
@@ -85,8 +85,8 @@ class DashboardController extends Controller
                 ['invoice' => 'INV-005', 'item' => 'Kaos Event', 'qty' => 100, 'deadline' => 'Besok', 'status' => 'Cetak'],
             ];
 
-            // Ubah view ke 'dashboard.produksi'
-            return view('dashboard.produksi', compact('productionStats', 'priorityOrders'));
+            // Ubah view ke 'dashboard.production'
+            return view('dashboard.production', compact('productionStats', 'priorityOrders'));
         }
 
         // ====================================================
@@ -113,8 +113,8 @@ class DashboardController extends Controller
                 ],
             ];
 
-            // Ubah view ke 'dashboard.pelanggan'
-            return view('dashboard.pelanggan', compact('myOrders'));
+            // Ubah view ke 'dashboard.customers'
+            return view('dashboard.customers', compact('myOrders'));
         }
 
         // Fallback jika tidak ada role yang cocok
