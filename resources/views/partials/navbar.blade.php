@@ -45,6 +45,7 @@
             </button>
         </div>
 
+<<<<<<< Updated upstream
         <div :class="{'block': mobileOpen, 'hidden': !mobileOpen}" 
              class="items-center justify-between w-full md:flex md:w-auto md:order-1" 
              id="navbar-sticky">
@@ -76,6 +77,13 @@
 
                 <li>
                     <a href="#catalog" class="block py-2 px-3 text-slate-300 rounded hover:bg-navy-700 md:hover:bg-transparent md:hover:text-lime-400 md:p-0 transition">KATALOG</a>
+                </li>
+
+                <!-- CTA Button - Design Link -->
+                <li>
+                    <a href="/design" class="block py-2 px-3 rounded md:p-0 transition text-slate-300 hover:bg-navy-700 md:hover:bg-transparent md:hover:text-lime-400">
+                        MULAI DESAIN
+                    </a>
                 </li>
 
                 @auth

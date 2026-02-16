@@ -21,7 +21,12 @@ Route::view('/faq', 'faq')->name('faq');
 Route::view('/terms-and-conditions', 'terms')->name('terms.conditions');
 Route::view('/features/ai-design', 'features.ai-design')->name('ai.design');
 
-// 3. Gallery (Public)
+// 3. Design Page
+Route::get('/design', function () {
+    return view('design.design');
+})->name('design');
+
+// 4. Gallery (Public)
 Route::get('/gallery', function () {
     $path = public_path('images/gallery');
     $files = File::exists($path) ? File::files($path) : [];
