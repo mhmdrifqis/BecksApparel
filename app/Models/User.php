@@ -21,7 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'nomor_telepon',
+        'phone',
         'password',
         'role_id',
     ];
@@ -70,7 +70,8 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin');
+        // return $this->hasRole('admin');
+        return $this->role_id === 1;
     }
 
     /**
@@ -78,7 +79,19 @@ class User extends Authenticatable
      */
     public function isManajemen(): bool
     {
-        return $this->hasRole('manajemen');
+        // return $this->hasRole('manajemen');
+        return $this->role_id === 2;
+    
+    }
+
+
+    /**
+     * Cek apakah user adalah Tim Produksi.
+     */
+    public function isProduksi(): bool
+    {
+        // return $this->hasRole('produksi');
+        return $this->role_id === 3;    
     }
 
     /**
@@ -86,15 +99,8 @@ class User extends Authenticatable
      */
     public function isPelanggan(): bool
     {
-        return $this->hasRole('pelanggan');
-    }
-
-    /**
-     * Cek apakah user adalah Tim Produksi.
-     */
-    public function isProduksi(): bool
-    {
-        return $this->hasRole('produksi');
+        // return $this->hasRole('pelanggan');
+        return $this->role_id === 4;
     }
 
     /**
@@ -102,7 +108,7 @@ class User extends Authenticatable
      */
     public function getRoleName(): ?string
     {
-        return $this->role ? $this->role->name : null;
+        return $this->role ? $this->role->role_name : null;
     }
 
     /**

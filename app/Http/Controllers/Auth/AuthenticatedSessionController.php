@@ -27,9 +27,12 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
+        
+        if ($request->user()->isPelanggan()) {
+            return redirect()->route('home'); 
+        }
         // UBAH INI: Arahkan ke route 'dashboard'
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**

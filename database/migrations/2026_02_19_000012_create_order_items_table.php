@@ -13,18 +13,12 @@ return new class extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            
-            // Relasi
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            
-            // Detail Item
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained();
+            $table->foreignId('design_id')->nullable()->constrained('designs');
+            $table->string('size');
             $table->integer('quantity');
-            $table->decimal('price', 12, 2); // Harga saat beli (biar aman kalau harga produk berubah)
-            $table->string('size')->nullable(); // S, M, L, XL
-            $table->text('custom_note')->nullable(); // Misal: "Sablon Nama: BUDI"
-            
-            $table->timestamps();
+            $table->decimal('price', 12, 2);
         });
     }
 
