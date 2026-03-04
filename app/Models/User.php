@@ -60,9 +60,25 @@ class User extends Authenticatable
     /**
      * Check if user has specific role.
      */
-    public function hasRole(string $roleName): bool
+    public function hasRole($role)
     {
-        return $this->role && $this->role->name === $roleName;
+        // 1. Normalisasi teks menjadi huruf kecil semua biar aman
+        $role = strtolower($role);
+
+        // 2. Daftar Mapping sesuai Database Seeder kita
+        $roles = [
+            'admin'     => 1,
+            'pimpinan'  => 2,
+            'produksi'  => 3, // Di route tulis 'produksi', di DB id 3
+            'pelanggan' => 4,
+        ];
+
+        // 3. Cek apakah role_id user sama dengan yang diminta
+        if (isset($roles[$role])) {
+            return $this->role_id === $roles[$role];
+        }
+
+        return false;
     }
 
     /**
@@ -118,4 +134,7 @@ class User extends Authenticatable
     {
         return $this->role ? $this->role->display_name : null;
     }
+
+
+    
 }

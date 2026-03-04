@@ -83,5 +83,45 @@
     @include('partials.footer')
     
     @include('partials.login-modal')
+
+        <!-- Global Loader Overlay -->
+    <div id="global-loader" class="hidden">
+        <div class="loader-container">
+            <div class="spinner"></div>
+            <p class="loader-text">Sedang memproses...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loader = document.getElementById('global-loader');
+
+            // 1. Munculkan loader saat form dikirim (Submit)
+            document.addEventListener('submit', function(e) {
+                loader.classList.remove('hidden');
+            });
+
+            // 2. Munculkan loader saat berpindah halaman (Klik Link)
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (link && 
+                    link.href && 
+                    !link.hash && 
+                    link.target !== '_blank' && 
+                    !link.getAttribute('download') &&
+                    link.href.startsWith(window.location.origin)) {
+                    loader.classList.remove('hidden');
+                }
+            });
+
+            // 3. Sembunyikan loader jika user kembali menggunakan tombol 'Back' browser
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    loader.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>

@@ -13,13 +13,17 @@
                 </a>
 
                 <div class="mb-8">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="relative inline-flex items-center">
-                            <span class="absolute -inset-1 rounded-md bg-lime-400"></span>
-                            <img src="{{ asset('images/Logo-Becks-Crop.png') }}" class="w-8 h-8 object-contain relative z-10" alt="Logo">
+                    <div class="flex items-center gap-3 mb-6"> 
+                        <div class="relative p-1 rounded-md"> 
+                            <div class="absolute -inset-0.5 bg-lime-400 rounded-md opacity-60 blur-sm"></div>
+                            <img src="{{ asset('images/Logo-Becks-Crop.png') }}" class="h-8 w-auto relative z-10 rounded-sm" alt="Logo">
                         </div>
-                        <span class="font-black text-2xl text-white tracking-widest">BECKS<span class="text-lime-400">APPAREL</span></span>
+                        <span class="self-center text-xl font-black whitespace-nowrap text-white tracking-widest antialiased">
+                            BECKS<span class="text-lime-400">APPAREL</span>
+                        </span>
                     </div>
+                </div>
+
 
                     <h1 class="text-3xl font-black text-white mb-2 leading-tight">
                         Selamat Datang Kembali

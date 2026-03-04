@@ -22,13 +22,21 @@
 
             <div class="flex items-center gap-4 sm:gap-5 text-white">
 
-                <a href="{{ route('customer.wishlist') }}" class="hover:text-lime-400 transition relative hidden sm:block">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                @auth
+                <!-- Notifikasi (Sekarang di Luar) -->
+                <a href="{{ route('customer.notifications') }}" class="hover:text-lime-400 transition relative">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                    <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-lime-500"></span>
+                    </span>
                 </a>
-                
+                @endauth
+
                 <a href="{{ route('customer.cart') }}" class="hover:text-lime-400 transition relative">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                    <span class="absolute -top-1.5 -right-2 bg-lime-500 text-navy-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-navy-900">0</span>
                 </a>
 
                 @if (Route::has('login'))
@@ -69,6 +77,13 @@
                                         Pesanan Saya
                                     </a>
 
+                                    <a href="{{ route('customer.profile') }}" class="group flex items-center px-4 py-2.5 text-sm text-slate-300 hover:bg-navy-700 hover:text-white transition">
+                                        <svg class="w-5 h-5 mr-3 text-slate-500 group-hover:text-lime-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Profil Saya
+                                    </a>
+
                                     <a href="{{ route('customer.design') }}" class="group flex items-center px-4 py-2.5 text-sm text-slate-300 hover:bg-navy-700 hover:text-white transition">
                                         <svg class="w-5 h-5 mr-3 text-slate-500 group-hover:text-lime-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
                                         Custom Jersey
@@ -82,6 +97,11 @@
                                     <a href="{{ route('customer.returns') }}" class="group flex items-center px-4 py-2.5 text-sm text-slate-300 hover:bg-navy-700 hover:text-white transition">
                                         <svg class="w-5 h-5 mr-3 text-slate-500 group-hover:text-lime-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                                         Retur Barang
+                                    </a>
+
+                                    <a href="{{ route('customer.wishlist') }}" class="group flex items-center px-4 py-2.5 text-sm text-slate-300 hover:bg-navy-700 hover:text-white transition">
+                                        <svg class="w-5 h-5 mr-3 text-slate-500 group-hover:text-lime-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                        Wishlist
                                     </a>
 
                                     <div class="border-t border-slate-700 my-1"></div>

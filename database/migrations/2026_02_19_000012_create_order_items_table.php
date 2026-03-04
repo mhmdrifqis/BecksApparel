@@ -6,21 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained();
-            $table->foreignId('design_id')->nullable()->constrained('designs');
-            $table->string('size');
             $table->integer('quantity');
-            $table->decimal('price', 12, 2);
+            $table->decimal('price', 15, 2); // Harga saat dibeli (antisipasi perubahan harga produk)
+            $table->timestamps();
         });
     }
+
+
 
     /**
      * Reverse the migrations.

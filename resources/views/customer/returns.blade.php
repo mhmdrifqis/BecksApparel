@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="min-h-screen bg-navy-900 pt-24 pb-12">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="mb-8">
             <h1 class="text-2xl md:text-3xl font-black text-white mb-2">AJUKAN <span class="text-lime-400">PENGEMBALIAN</span></h1>
