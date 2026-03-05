@@ -135,6 +135,11 @@ class User extends Authenticatable
         return $this->role ? $this->role->display_name : null;
     }
 
-
-    
+    /**
+     * Get the orders for the user.
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

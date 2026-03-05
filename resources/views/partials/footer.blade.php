@@ -29,8 +29,8 @@
                         <li><a href="{{ route('about.us') }}" class="hover:text-lime-400 transition">About Us</a></li>
                         <li><a href="{{ route('faq') }}" class="hover:text-lime-400 transition">FAQ</a></li>
                         <li><a href="{{ route('terms.conditions') }}" class="hover:text-lime-400 transition">Terms & Conditions</a></li>
-                        <li><a href="#" class="hover:text-lime-400 transition">Studio Desain</a></li>
-                        <li><a href="#" class="hover:text-lime-400 transition">Katalog</a></li>
+                        <li><a href="{{ route('features') }}" class="hover:text-lime-400 transition">Fitur</a></li>
+                        <li><a href="{{ route('catalog') }}" class="hover:text-lime-400 transition">Katalog</a></li>
                     </ul>
                 </div>
 

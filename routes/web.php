@@ -29,6 +29,8 @@ Route::view('/about-us', 'about-us')->name('about.us');
 Route::view('/faq', 'faq')->name('faq');
 Route::view('/terms-and-conditions', 'terms')->name('terms.conditions');
 Route::view('/features/ai-design', 'features.ai-design')->name('ai.design');
+Route::view('/catalog', 'catalog')->name('catalog');
+Route::view('/features', 'features')->name('features');
 
 // 3. Gallery (Public)
 Route::get('/gallery', function () {
@@ -52,6 +54,7 @@ require __DIR__.'/auth.php';
 
 // 5. Public Product Routes (UC5: Lihat Produk)
 Route::get('/products', [CustomerController::class, 'index'])->name('products.index');
+Route::get('/products/{product:slug}', [CustomerController::class, 'show'])->name('products.show');
 Route::get('/cart', [CustomerController::class, 'cart'])->name('cart');
 
 // 5. Protected Routes (Harus Login)
@@ -59,6 +62,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // === UTAMA: Single Dashboard Route ===
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Cart Actions
+    Route::post('/cart/add', [CustomerController::class, 'addToCart'])->name('cart.add');
+    Route::delete('/cart/item/{item}', [CustomerController::class, 'removeCartItem'])->name('cart.remove');
 
     // === ADMIN ONLY ===
     Route::middleware(['role:admin,pimpinan'])->prefix('admin')->name('admin.')->group(function () {
@@ -82,8 +89,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/returns', [CustomerController::class, 'returns'])->name('returns');
         Route::get('/wishlist', [CustomerController::class, 'wishlist'])->name('wishlist');
         Route::get('/checkout', [CustomerController::class, 'checkout'])->name('checkout');
+        Route::post('/checkout', [CustomerController::class, 'processCheckout'])->name('checkout.process');
         Route::get('/payment', [CustomerController::class, 'payment'])->name('payment');
         Route::get('/notifications', [CustomerController::class, 'notifications'])->name('notifications');
+
+        // Order & Invoices
+        Route::get('/orders', [CustomerController::class, 'orders'])->name('orders');
+        Route::get('/orders/{order}', [CustomerController::class, 'showOrder'])->name('orders.show');
+        Route::post('/orders/{order}/payment', [CustomerController::class, 'uploadPaymentProof'])->name('payment.upload');
+        Route::get('/invoices', [CustomerController::class, 'invoices'])->name('invoices');
 
         // Route Profil & Alamat
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');

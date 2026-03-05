@@ -137,17 +137,21 @@
         <div :class="{'block': mobileOpen, 'hidden': !mobileOpen}" class="items-center justify-between w-full md:flex md:w-auto md:order-1 hidden" id="navbar-sticky">
             <ul class="flex flex-col p-4 md:p-0 mt-4 font-bold border border-slate-800 rounded-lg bg-navy-800 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent">
                 <li>
-                    <a href="/" class="block py-2 px-3 rounded md:p-0 transition {{ Request::is('/') ? 'text-white md:text-lime-400' : 'text-slate-300 hover:text-lime-400' }}">HOME</a>
+                    <a href="{{ route('home') }}" class="block py-2 px-3 rounded md:p-0 transition {{ Request::is('/') ? 'text-white md:text-lime-400' : 'text-slate-300 hover:text-lime-400' }}">HOME</a>
                 </li>
                 <li>
-                    <a href="/gallery" class="block py-2 px-3 rounded md:p-0 transition {{ Request::is('gallery*') ? 'text-white md:text-lime-400' : 'text-slate-300 hover:text-lime-400' }}">GALLERY</a>
+                    <a href="{{ route('gallery') }}" class="block py-2 px-3 rounded md:p-0 transition {{ Request::is('gallery*') ? 'text-white md:text-lime-400' : 'text-slate-300 hover:text-lime-400' }}">GALLERY</a>
                 </li>
                 <li>
-                    <a href="#features" class="block py-2 px-3 text-slate-300 hover:text-lime-400 md:p-0 transition">FITUR</a>
+                    <a href="{{ route('catalog') }}" class="block py-2 px-3 rounded md:p-0 transition {{ Request::is('catalog*') ? 'text-white md:text-lime-400' : 'text-slate-300 hover:text-lime-400' }}">KATALOG</a>
                 </li>
                 <li>
-                    <a href="#catalog" class="block py-2 px-3 text-slate-300 hover:text-lime-400 md:p-0 transition">KATALOG</a>
+                    <a href="{{ route('products.index') }}" class="block py-2 px-3 rounded md:p-0 transition {{ Request::is('products*') ? 'text-white md:text-lime-400' : 'text-slate-300 hover:text-lime-400' }}">PRODUK</a>
                 </li>
+                <li>
+                    <a href="{{ route('features') }}" class="block py-2 px-3 rounded md:p-0 transition {{ Request::is('features*') ? 'text-white md:text-lime-400' : 'text-slate-300 hover:text-lime-400' }}">FITUR</a>
+                </li>
+                
             </ul>
         </div>
 

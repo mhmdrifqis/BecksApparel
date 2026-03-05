@@ -18,4 +18,16 @@ class Product extends Model
         'image',
         'status',
     ];
+
+    protected $with = ['colors', 'sizes'];
+
+    public function colors()
+    {
+        return $this->hasMany(ProductColor::class);
+    }
+
+    public function sizes()
+    {
+        return $this->hasMany(ProductSize::class);
+    }
 }

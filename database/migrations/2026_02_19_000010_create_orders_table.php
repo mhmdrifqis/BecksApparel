@@ -14,9 +14,8 @@ return new class extends Migration
             $table->string('invoice_number')->unique();
             $table->decimal('total_amount', 15, 2);
             
-            // Menggunakan enum untuk validasi status yang lebih ketat
             $table->enum('order_status', ['pending', 'production', 'shipped', 'completed', 'cancelled', 'returned'])->default('pending');
-            $table->enum('payment_status', ['pending', 'paid', 'failed', 'expired'])->default('pending');
+            $table->enum('payment_status', ['pending', 'awaiting_verification', 'paid', 'failed', 'expired'])->default('pending');
             
             $table->timestamp('paid_at')->nullable();
             $table->string('tracking_number')->nullable(); // Nomor Resi

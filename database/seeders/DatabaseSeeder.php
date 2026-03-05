@@ -73,15 +73,23 @@ class DatabaseSeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Jersey Full Print Premium',
+                'slug' => 'jersey-full-print-premium',
                 'description' => 'Jersey olahraga dengan bahan dry-fit premium dan sablon sublimasi full color.',
-                'base_price' => 150000,
+                'price' => 150000,
+                'stock' => 100,
+                'image' => null,
+                'status' => 'available',
                 'created_at' => $now, 'updated_at' => $now
             ],
             [
                 'id' => 2,
                 'name' => 'Kaos Cotton Combed 30s',
+                'slug' => 'kaos-cotton-combed-30s',
                 'description' => 'Kaos santai bahan katun combed 30s super adem dengan sablon DTF awet.',
-                'base_price' => 85000,
+                'price' => 85000,
+                'stock' => 50,
+                'image' => null,
+                'status' => 'available',
                 'created_at' => $now, 'updated_at' => $now
             ]
         ];

@@ -4,6 +4,9 @@
 body { font-family: 'Inter', sans-serif; }
 h1, h2, h3, .font-display { font-family: 'Montserrat', sans-serif; }
 
+/* AlpineJS Cloak */
+[x-cloak] { display: none !important; }
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: #020617; }

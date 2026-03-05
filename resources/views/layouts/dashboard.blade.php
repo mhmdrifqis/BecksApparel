@@ -120,6 +120,7 @@
                     !link.hash && 
                     link.target !== '_blank' && 
                     !link.getAttribute('download') &&
+                    link.getAttribute('href') !== '#' &&
                     link.href.startsWith(window.location.origin)) {
                     loader.classList.remove('hidden');
                 }
