@@ -115,12 +115,21 @@
                             </div>
                         </div>
 
-                        <button type="submit" 
-                            class="w-full flex items-center justify-center gap-3 bg-lime-400 hover:bg-lime-500 text-navy-950 font-black text-lg py-4 rounded-xl shadow-lg shadow-lime-400/20 hover:scale-[1.02] transition-all duration-300 @if($product->stock <= 0 || $product->status == 'unavailable') opacity-50 cursor-not-allowed @endif"
-                            @if($product->stock <= 0 || $product->status == 'unavailable') disabled @endif>
-                            <i data-lucide="shopping-cart" class="w-6 h-6"></i>
-                            TAMBAH KE KERANJANG
-                        </button>
+                        <div class="flex flex-col gap-3">
+                            <button type="submit" 
+                                class="w-full flex items-center justify-center gap-3 bg-lime-400 hover:bg-lime-500 text-navy-950 font-black text-lg py-4 rounded-xl shadow-lg shadow-lime-400/20 hover:scale-[1.02] transition-all duration-300 @if($product->stock <= 0 || $product->status == 'unavailable') opacity-50 cursor-not-allowed @endif"
+                                @if($product->stock <= 0 || $product->status == 'unavailable') disabled @endif>
+                                <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                                TAMBAH KE KERANJANG
+                            </button>
+                            
+                            <!-- Tombol Kustomisasi -->
+                            <a href="{{ route('customer.design', $product->id) }}"
+                                class="w-full flex items-center justify-center gap-3 bg-navy-800 hover:bg-navy-700 text-lime-400 border border-lime-400/30 font-bold text-lg py-4 rounded-xl hover:scale-[1.02] transition-all duration-300 @if($product->stock <= 0 || $product->status == 'unavailable') opacity-50 cursor-not-allowed pointer-events-none @endif">
+                                <i data-lucide="pen-tool" class="w-6 h-6"></i>
+                                KUSTOMISASI DESAIN (Tambah Nama & Nomor)
+                            </a>
+                        </div>
                         @if ($errors->any())
                             <div class="mt-4 text-sm text-red-400 bg-red-400/10 border border-red-400/30 rounded-xl p-3">
                                 <ul class="list-disc list-inside space-y-1">

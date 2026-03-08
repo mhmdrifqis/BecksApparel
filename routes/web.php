@@ -65,6 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Cart Actions
     Route::post('/cart/add', [CustomerController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/add-design/{product}', [CustomerController::class, 'addDesignToCart'])->name('cart.addDesign');
     Route::delete('/cart/item/{item}', [CustomerController::class, 'removeCartItem'])->name('cart.remove');
 
     // === ADMIN ONLY ===
@@ -73,19 +74,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class);
         
         // Admin Order Management (UA3 - UA7)
+        Route::get('orders/invoices', [AdminOrderController::class, 'invoices'])->name('orders.invoices');
+        Route::get('orders/{order}/invoice', [AdminOrderController::class, 'showInvoice'])->name('orders.invoice');
+        
         Route::resource('orders', AdminOrderController::class);
         Route::post('orders/{order}/verify', [AdminOrderController::class, 'verifyPayment'])->name('orders.verify');
         Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
         Route::post('orders/{order}/return', [AdminOrderController::class, 'handleReturn'])->name('orders.return');
         
+        // Mass Shipping
+        Route::get('orders-shipping', [AdminOrderController::class, 'shipping'])->name('orders.shipping');
+        Route::post('orders-bulk-shipping', [AdminOrderController::class, 'bulkUpdateShipping'])->name('orders.bulkShipping');
+        
+        // Reports
+        Route::get('reports/sales', [\App\Http\Controllers\Admin\AdminReportController::class, 'salesReport'])->name('reports.sales');
     });
 
     // === CUSTOMER PROTECTED ROUTES ===
     Route::prefix('my')->name('customer.')->group(function () {
-        Route::get('/design', [CustomerController::class, 'design'])->name('design');
+        Route::get('/design/{product}', [CustomerController::class, 'design'])->name('design');
         Route::get('/cart', [CustomerController::class, 'cart'])->name('cart');
         Route::get('/orders', [CustomerController::class, 'orders'])->name('orders');
-        Route::get('/invoices', [CustomerController::class, 'invoices'])->name('invoices');
         Route::get('/returns', [CustomerController::class, 'returns'])->name('returns');
         Route::get('/wishlist', [CustomerController::class, 'wishlist'])->name('wishlist');
         Route::get('/checkout', [CustomerController::class, 'checkout'])->name('checkout');
@@ -97,7 +106,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/orders', [CustomerController::class, 'orders'])->name('orders');
         Route::get('/orders/{order}', [CustomerController::class, 'showOrder'])->name('orders.show');
         Route::post('/orders/{order}/payment', [CustomerController::class, 'uploadPaymentProof'])->name('payment.upload');
-        Route::get('/invoices', [CustomerController::class, 'invoices'])->name('invoices');
 
         // Route Profil & Alamat
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');

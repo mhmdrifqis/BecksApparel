@@ -20,9 +20,10 @@ class CustomerController extends Controller
         return view('customer.products.show', compact('product'));
     }
 
-    public function design()
+    // UC5: Buka Canvas Editor untuk produk tertentu
+    public function design(Product $product)
     {
-        return view('customer.design'); // Arahkan ke file design.blade.php
+        return view('customer.editor', compact('product')); 
     }
 
     public function orders()
@@ -42,11 +43,6 @@ class CustomerController extends Controller
         return view('customer.orders.show', compact('order'));
     }
 
-    public function invoices()
-    {
-        return view('customer.invoices');
-    }
-
     public function returns()
     {
         return view('customer.returns');
@@ -54,7 +50,7 @@ class CustomerController extends Controller
 
     public function cart()
     {
-        $cart = \App\Models\Cart::with('items.product')->firstOrCreate(['user_id' => auth()->id()]);
+        $cart = \App\Models\Cart::with(['items.product', 'items.design'])->firstOrCreate(['user_id' => auth()->id()]);
         
         $subtotal = $cart->items->sum(function($item) {
             return $item->product ? $item->product->price * $item->quantity : 0;
@@ -165,6 +161,47 @@ class CustomerController extends Controller
         return redirect()->route('cart')->with('status', 'Produk berhasil ditambahkan ke keranjang.');
     }
 
+    public function addDesignToCart(Request $request, Product $product)
+    {
+        $request->validate([
+            'size' => 'required|string',
+            'quantity' => 'required|integer|min:1',
+            'design_json' => 'required|string',
+            'preview_image' => 'required|string', // Base64 dataURL
+        ]);
+
+        // 1. Simpan gambar preview dari Base64 ke dalam storage (opsional tapi disarankan)
+        $imageParts = explode(";base64,", $request->preview_image);
+        $imageTypeAux = explode("image/", $imageParts[0]);
+        $imageType = $imageTypeAux[1];
+        $imageBase64 = base64_decode($imageParts[1]);
+        $fileName = 'designs/design_' . uniqid() . '.' . $imageType;
+        
+        \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $imageBase64);
+
+        // 2. Simpan record Design ke database
+        $design = \App\Models\Design::create([
+            'user_id' => auth()->id(),
+            'product_id' => $product->id,
+            'design_json' => $request->design_json,
+            'preview_image' => $fileName,
+            'status' => 'pending'
+        ]);
+
+        // 3. Masukkan ke keranjang
+        $cart = \App\Models\Cart::firstOrCreate(['user_id' => auth()->id()]);
+
+        // Karena ini desain kustom, kita buat item baru di cart (tidak menggabungkan quantity meski produk sama)
+        $cart->items()->create([
+            'product_id' => $product->id,
+            'design_id' => $design->id,
+            'size' => $request->size,
+            'quantity' => $request->quantity,
+        ]);
+
+        return redirect()->route('customer.cart')->with('status', 'Desain kustom Anda berhasil disimpan ke keranjang.');
+    }
+
     public function removeCartItem($id)
     {
         $cartItem = \App\Models\CartItem::where('id', $id)->whereHas('cart', function($q) {
@@ -223,11 +260,25 @@ class CustomerController extends Controller
         // Move Cart Items to Order Items
         foreach ($cart->items as $item) {
             if ($item->product) {
+                // Determine size. Since the frontend might pass size in $selectedItemsData, let's get it from the map.
+                $itemSize = $item->size; // Fallback to cart size
+                
+                // Cek apakah size di-override saat checkout request
+                $selectedItemsData = $request->input('selected_items', []);
+                foreach ($selectedItemsData as $selected) {
+                    if (isset($selected['id']) && $selected['id'] == $item->id && isset($selected['size'])) {
+                        $itemSize = $selected['size'];
+                        break;
+                    }
+                }
+
                 \App\Models\OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
                     'quantity' => $item->quantity,
-                    'price' => $item->product->price // Snapshot harga
+                    'price' => $item->product->price, // Snapshot harga
+                    'size' => $itemSize, // Mengambil size yang benar dari cart item atau request
+                    'design_id' => $item->design_id
                 ]);
 
                 // Kurangi stok produk
@@ -246,6 +297,11 @@ class CustomerController extends Controller
             $cart->delete();
         }
 
+        // --- NOTIFICATION ---
+        // Notify all admins about the new order
+        $admins = \App\Models\User::where('role', 'admin')->get();
+        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\OrderCreatedNotification($order));
+
         return redirect()->route('customer.orders.show', $order->id)->with('status', 'Pesanan berhasil dibuat! Silakan lanjutkan ke pembayaran.');
     }
 
@@ -263,29 +319,27 @@ class CustomerController extends Controller
 
         $path = $request->file('payment_proof')->store('payments', 'public');
 
-        // Create Payment
-        \App\Models\Payment::create([
-            'order_id' => $order->id,
-            'payment_method' => 'bank_transfer',
-            'transaction_id' => null,
-            'payment_status' => 'pending',
-            'paid_at' => now(), // Menyimpan waktu upload
-            // Karena tidak ada kolom khusus untuk foto di migrations asli sesuai dokumentasi awal, 
-            // Kita akan buat field sementara atau letakkan di transaction_id.
-            // Oh, tidak, migration create_payments_table memiliki kolom "transaction_id" string. 
-            // Kita pakai "transaction_id" untuk menyimpan path file foto sementata untuk diakses admin. 
-            // ATAU bisa di update migration dsb jika dibutuhkan. Kita simpan di transaction_id untuk sekarang.
-        ]);
-
-        // Karena kita menggunakan trick penyimpanan filepath ke transaction id
-        $payment = \App\Models\Payment::where('order_id', $order->id)->first();
-        $payment->transaction_id = $path;
-        $payment->save();
+        // Update or Create Payment record
+        $payment = \App\Models\Payment::updateOrCreate(
+            ['order_id' => $order->id],
+            [
+                'payment_method' => 'bank_transfer',
+                'transaction_id' => $path,
+                'payment_status' => 'pending',
+                'paid_at' => now(), 
+            ]
+        );
 
         // Update Order Status
         $order->update([
             'payment_status' => 'awaiting_verification' // Custom status untuk menunggu cek admin
         ]);
+
+        // --- NOTIFICATION ---
+        // Notify all admins that payment proof has been uploaded
+        $admins = \App\Models\User::where('role', 'admin')->get();
+        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\OrderStatusUpdatedNotification($order, 'Pelanggan telah mengunggah bukti pembayaran untuk pesanan ' . $order->invoice_number . '. Silakan ditinjau.'));
+
 
         return redirect()->route('customer.orders.show', $order->id)->with('status', 'Bukti pembayaran berhasil diunggah. Menunggu verifikasi admin.');
     }

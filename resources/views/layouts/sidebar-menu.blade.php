@@ -30,7 +30,7 @@
         </a>
     </li>
     <li>
-        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+        <a href="{{ route('admin.orders.shipping') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('admin.orders.shipping') ? 'bg-navy-800 text-lime-400' : '' }}">
             <i data-lucide="truck" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
             <span class="flex-1 ms-3 whitespace-nowrap">Pengiriman (Resi)</span>
         </a>
@@ -72,13 +72,13 @@
         <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Keuangan & Analisis</span>
     </li>
     <li>
-        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+        <a href="{{ route('admin.orders.invoices') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('admin.orders.invoice*') ? 'bg-navy-800 text-lime-400' : '' }}">
             <i data-lucide="file-text" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
             <span class="flex-1 ms-3 whitespace-nowrap">Invoice & Keuangan</span>
         </a>
     </li>
     <li>
-        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+        <a href="{{ route('admin.reports.sales') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('admin.reports.sales') ? 'bg-navy-800 text-lime-400' : '' }}">
             <i data-lucide="pie-chart" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
             <span class="flex-1 ms-3 whitespace-nowrap">Laporan Penjualan</span>
         </a>

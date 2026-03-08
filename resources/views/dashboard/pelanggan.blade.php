@@ -19,7 +19,11 @@
         <div class="lg:col-span-2 space-y-8">
             
             @php 
-                $activeOrder = $myOrders[1] ?? null; // Simulasi order yang sedang diproses
+                // Active order: ambil dari DB (pesanan terbaru yang bukan selesai/batal)
+                $activeOrder = \App\Models\Order::where('user_id', Auth::id())
+                                ->whereIn('order_status', ['pending', 'production', 'shipped'])
+                                ->latest()
+                                ->first();
             @endphp
 
             @if($activeOrder)
@@ -28,44 +32,57 @@
 
                 <div class="flex justify-between items-start mb-6 relative z-10">
                     <div>
-                        <span class="text-lime-400 font-bold text-xs uppercase tracking-wider mb-1 block">Pesanan Sedang Diproses</span>
-                        <h3 class="text-xl font-bold text-white">{{ $activeOrder['invoice'] }}</h3>
-                        <p class="text-slate-400 text-sm mt-1">Estimasi Selesai: <span class="text-white font-bold">3 Hari Lagi</span></p>
+                        <span class="text-lime-400 font-bold text-xs uppercase tracking-wider mb-1 block">Pesanan Aktif Terbaru</span>
+                        <h3 class="text-xl font-bold text-white">{{ $activeOrder->invoice_number }}</h3>
+                        <p class="text-slate-400 text-sm mt-1">Dibuat: <span class="text-white font-bold">{{ $activeOrder->created_at->format('d M Y') }}</span></p>
                     </div>
                     <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full text-xs font-bold uppercase">
-                        {{ $activeOrder['status'] }}
+                        {{ $activeOrder->order_status }}
                     </span>
                 </div>
 
                 <div class="relative mt-8 mb-4">
                     <div class="absolute top-1/2 left-0 w-full h-1 bg-navy-800 -translate-y-1/2 rounded"></div>
-                    <div class="absolute top-1/2 left-0 w-1/2 h-1 bg-lime-400 -translate-y-1/2 rounded"></div> <div class="relative flex justify-between z-10">
+                    @php
+                        $progressWidth = '0%';
+                        if ($activeOrder->order_status == 'pending') $progressWidth = '0%';
+                        elseif ($activeOrder->order_status == 'production') $progressWidth = '33%';
+                        elseif ($activeOrder->order_status == 'shipped') $progressWidth = '66%';
+                        elseif ($activeOrder->order_status == 'completed') $progressWidth = '100%';
+                        
+                        $isProd = in_array($activeOrder->order_status, ['production', 'shipped', 'completed']);
+                        $isShip = in_array($activeOrder->order_status, ['shipped', 'completed']);
+                        $isDone = $activeOrder->order_status == 'completed';
+                    @endphp
+                    <div class="absolute top-1/2 left-0 h-1 bg-lime-400 -translate-y-1/2 rounded transition-all duration-1000" style="width: {{ $progressWidth }}"></div> 
+                    
+                    <div class="relative flex justify-between z-10">
                         <div class="flex flex-col items-center gap-2">
                             <div class="w-8 h-8 rounded-full bg-lime-400 text-navy-950 flex items-center justify-center border-4 border-navy-900 shadow-lg">
                                 <i data-lucide="check" class="w-4 h-4 font-bold"></i>
                             </div>
-                            <span class="text-xs font-bold text-lime-400">Bayar</span>
+                            <span class="text-xs font-bold text-lime-400">Pesan</span>
                         </div>
 
                         <div class="flex flex-col items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-lime-400 text-navy-950 flex items-center justify-center border-4 border-navy-900 shadow-lg animate-pulse">
+                            <div class="w-8 h-8 rounded-full {{ $isProd ? 'bg-lime-400 text-navy-950' : 'bg-navy-800 text-slate-500' }} flex items-center justify-center border-4 border-navy-900 {{ $activeOrder->order_status == 'production' ? 'animate-pulse' : '' }}">
                                 <i data-lucide="scissors" class="w-4 h-4"></i>
                             </div>
-                            <span class="text-xs font-bold text-white">Produksi</span>
+                            <span class="text-xs font-bold {{ $isProd ? 'text-white' : 'text-slate-500' }}">Produksi</span>
                         </div>
 
                         <div class="flex flex-col items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-navy-800 text-slate-500 flex items-center justify-center border-4 border-navy-900">
+                            <div class="w-8 h-8 rounded-full {{ $isShip ? 'bg-lime-400 text-navy-950' : 'bg-navy-800 text-slate-500' }} flex items-center justify-center border-4 border-navy-900 {{ $activeOrder->order_status == 'shipped' ? 'animate-pulse' : '' }}">
                                 <i data-lucide="truck" class="w-4 h-4"></i>
                             </div>
-                            <span class="text-xs font-bold text-slate-500">Kirim</span>
+                            <span class="text-xs font-bold {{ $isShip ? 'text-white' : 'text-slate-500' }}">Kirim</span>
                         </div>
 
                         <div class="flex flex-col items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-navy-800 text-slate-500 flex items-center justify-center border-4 border-navy-900">
+                            <div class="w-8 h-8 rounded-full {{ $isDone ? 'bg-lime-400 text-navy-950' : 'bg-navy-800 text-slate-500' }} flex items-center justify-center border-4 border-navy-900">
                                 <i data-lucide="package" class="w-4 h-4"></i>
                             </div>
-                            <span class="text-xs font-bold text-slate-500">Terima</span>
+                            <span class="text-xs font-bold {{ $isDone ? 'text-white' : 'text-slate-500' }}">Terima</span>
                         </div>
                     </div>
                 </div>
@@ -75,7 +92,7 @@
             <div class="bg-navy-900 border border-slate-800 rounded-xl overflow-hidden">
                 <div class="p-6 border-b border-slate-800 flex justify-between items-center">
                     <h3 class="font-bold text-white">Riwayat Pesanan Saya</h3>
-                    <a href="#" class="text-xs text-lime-400 hover:text-white transition">Lihat Semua</a>
+                    <a href="{{ route('customer.orders') }}" class="text-xs text-lime-400 hover:text-white transition">Lihat Semua</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-slate-300 text-sm">
@@ -91,19 +108,18 @@
                         <tbody class="divide-y divide-slate-800">
                             @forelse($myOrders as $order)
                             <tr class="hover:bg-navy-800/50 transition">
-                                <td class="px-6 py-4 font-bold text-white">{{ $order['invoice'] }}</td>
-                                <td class="px-6 py-4 text-slate-500">{{ $order['date'] }}</td>
-                                <td class="px-6 py-4 text-lime-400 font-mono">Rp {{ number_format($order['total'], 0, ',', '.') }}</td>
+                                <td class="px-6 py-4 font-bold text-white">{{ $order->invoice_number }}</td>
+                                <td class="px-6 py-4 text-slate-500">{{ $order->created_at->format('d M Y') }}</td>
+                                <td class="px-6 py-4 text-lime-400 font-mono">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                                 <td class="px-6 py-4">
-                                    @if($order['status'] == 'Selesai')
+                                    @if($order->order_status == 'completed')
                                         <span class="px-2 py-1 bg-lime-500/10 text-lime-400 border border-lime-500/20 rounded text-xs font-bold">Selesai</span>
                                     @else
-                                        <span class="px-2 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded text-xs font-bold">{{ $order['status'] }}</span>
+                                        <span class="px-2 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded text-xs font-bold uppercase">{{ $order->order_status }}</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <button class="text-slate-400 hover:text-white mx-1"><i data-lucide="eye" class="w-4 h-4"></i></button>
-                                    <button class="text-slate-400 hover:text-lime-400 mx-1"><i data-lucide="download" class="w-4 h-4"></i></button>
+                                    <a href="{{ route('customer.orders.show', $order->id) }}" class="text-slate-400 hover:text-white mx-1"><i data-lucide="eye" class="w-4 h-4"></i></a>
                                 </td>
                             </tr>
                             @empty

@@ -83,24 +83,38 @@
         </div>
 
         <div class="bg-navy-900 border border-slate-800 p-6 rounded-xl">
-            <h3 class="text-white font-bold mb-4">Aktivitas Sistem</h3>
-            <div class="space-y-6">
-                @foreach($activities as $activity)
-                <div class="flex gap-3 relative">
-                    <div class="absolute left-2 top-2 -bottom-6 w-0.5 bg-slate-800"></div>
-                    
-                    <div class="relative z-10 w-4 h-4 rounded-full {{ isset($activity['type']) && $activity['type'] == 'alert' ? 'bg-red-500' : 'bg-lime-400' }} mt-1"></div>
+            <h3 class="text-white font-bold mb-4">Pesanan Terbaru</h3>
+            <div class="space-y-4">
+                @forelse($recentOrders as $order)
+                <div class="flex items-center justify-between p-3 bg-navy-950 border border-slate-800 rounded-lg hover:border-lime-400/50 transition group">
                     <div>
-                        <p class="text-slate-300 text-sm"><span class="font-bold text-white">{{ $activity['user'] }}</span> {{ $activity['action'] }}</p>
-                        <p class="text-xs text-slate-500 mt-1">{{ $activity['time'] }}</p>
+                        <a href="{{ route('admin.orders.show', $order->id) }}" class="font-bold text-white group-hover:text-lime-400 text-sm block">
+                            {{ $order->invoice_number }}
+                        </a>
+                        <p class="text-xs text-slate-400 mt-1">{{ $order->user->name }} • {{ $order->created_at->diffForHumans() }}</p>
+                    </div>
+                    <div>
+                        @if($order->order_status == 'pending')
+                            <span class="px-2 py-1 rounded text-[10px] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20 uppercase animate-pulse">Action Req</span>
+                        @elseif($order->order_status == 'production')
+                            <span class="px-2 py-1 rounded text-[10px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20 uppercase">Proses</span>
+                        @elseif($order->order_status == 'shipped')
+                            <span class="px-2 py-1 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 uppercase">Kirim</span>
+                        @else
+                            <span class="px-2 py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 uppercase">{{ $order->order_status }}</span>
+                        @endif
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="text-center py-6 text-slate-500">
+                    <p class="text-sm">Belum ada pesanan terbaru.</p>
+                </div>
+                @endforelse
             </div>
             
-            <button class="w-full mt-6 py-2 border border-slate-700 text-slate-400 rounded-lg hover:bg-slate-800 hover:text-white transition text-sm">
-                Lihat Semua Log
-            </button>
+            <a href="{{ route('admin.orders.index') }}" class="block text-center w-full mt-6 py-2 border border-slate-700 text-slate-400 rounded-lg hover:bg-slate-800 hover:text-white transition text-sm">
+                Lihat Semua Pesanan
+            </a>
         </div>
     </div>
 

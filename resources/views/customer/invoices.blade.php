@@ -27,40 +27,53 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-700">
-                        
-                        {{-- CONTOH DATA DUMMY (Nanti diganti @forelse) --}}
+                        @forelse($orders as $order)
                         <tr class="hover:bg-navy-700/50 transition">
-                            <td class="px-6 py-4 font-medium text-white">INV-20260220-001</td>
-                            <td class="px-6 py-4">20 Feb 2026</td>
-                            <td class="px-6 py-4 font-bold text-white">Rp 1.500.000</td>
+                            <td class="px-6 py-4 font-medium text-white">{{ $order->invoice_number }}</td>
+                            <td class="px-6 py-4">{{ $order->created_at->format('d M Y') }}</td>
+                            <td class="px-6 py-4 font-bold text-white">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                             <td class="px-6 py-4">
-                                <span class="bg-green-500/10 text-green-400 border border-green-500/20 px-2.5 py-0.5 rounded-full text-xs font-bold">
-                                    LUNAS
-                                </span>
+                                @if($order->payment_status === 'paid')
+                                    <span class="bg-green-500/10 text-green-400 border border-green-500/20 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase block w-fit">
+                                        LUNAS
+                                    </span>
+                                @elseif($order->payment_status === 'pending')
+                                    <span class="bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase block w-fit">
+                                        PENDING
+                                    </span>
+                                @else
+                                    <span class="bg-slate-700/50 text-slate-300 border border-slate-600 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase block w-fit">
+                                        {{ $order->payment_status }}
+                                    </span>
+                                @endif
+                                
+                                @if($order->tracking_number)
+                                    <div class="mt-2 text-xs">
+                                        <span class="text-slate-500 block">No. Resi:</span>
+                                        <span class="text-lime-400 font-mono">{{ $order->tracking_number }}</span>
+                                    </div>
+                                @endif
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <a href="#" class="text-lime-400 hover:text-lime-300 font-bold text-xs border border-lime-400 rounded px-3 py-1.5 hover:bg-lime-400 hover:text-navy-900 transition">
-                                    Download PDF
+                                @if($order->payment_status === 'paid')
+                                <a href="{{ route('customer.orders.show', $order->id) }}" class="text-lime-400 hover:text-lime-300 font-bold text-xs border border-lime-400 rounded px-3 py-1.5 hover:bg-lime-400 hover:text-navy-900 transition mt-2 inline-block">
+                                    Lihat Detail & Unduh
                                 </a>
-                            </td>
-                        </tr>
-
-                        <tr class="hover:bg-navy-700/50 transition">
-                            <td class="px-6 py-4 font-medium text-white">INV-20260218-045</td>
-                            <td class="px-6 py-4">18 Feb 2026</td>
-                            <td class="px-6 py-4 font-bold text-white">Rp 750.000</td>
-                            <td class="px-6 py-4">
-                                <span class="bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 px-2.5 py-0.5 rounded-full text-xs font-bold">
-                                    PENDING
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="#" class="text-white bg-lime-600 hover:bg-lime-500 font-bold text-xs rounded px-3 py-1.5 transition">
+                                @else
+                                <a href="{{ route('customer.orders.show', $order->id) }}" class="text-white bg-lime-600 hover:bg-lime-500 font-bold text-xs rounded px-3 py-1.5 transition mt-2 inline-block">
                                     Bayar Sekarang
                                 </a>
+                                @endif
                             </td>
                         </tr>
-                        {{-- END CONTOH DATA --}}
+                        @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-slate-500">
+                                <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                                <p>Belum ada riwayat invoice.</p>
+                            </td>
+                        </tr>
+                        @endforelse
 
                     </tbody>
                 </table>

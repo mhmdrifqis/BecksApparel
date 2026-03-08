@@ -35,7 +35,9 @@
                     </div>
 
                     <div class="w-24 h-24 bg-navy-900 rounded-lg overflow-hidden flex-shrink-0">
-                        @if ($item->product->image)
+                        @if ($item->design_id && $item->design && $item->design->preview_image)
+                            <img src="{{ asset('storage/' . $item->design->preview_image) }}" alt="Custom Design" class="w-full h-full object-contain bg-slate-800">
+                        @elseif ($item->product->image)
                             <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
                         @else
                             <div class="w-full h-full flex items-center justify-center bg-slate-800 text-slate-500 text-xs">No Image</div>
@@ -47,6 +49,9 @@
                             <h3 class="text-white font-bold text-lg hover:text-lime-400 transition">{{ $item->product->name }}</h3>
                         </a>
                         <p class="text-slate-400 text-sm">Size: {{ $item->size }}</p>
+                        @if($item->design_id)
+                            <span class="inline-block px-2 py-0.5 mt-1 text-xs font-bold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 rounded uppercase tracking-wider">Desain Kustom</span>
+                        @endif
                         <p class="text-lime-400 font-bold mt-1">Rp {{ number_format($item->product->price, 0, ',', '.') }}</p>
                     </div>
 

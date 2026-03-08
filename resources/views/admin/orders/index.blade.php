@@ -45,7 +45,7 @@
                         </td>
 
                         <td class="px-6 py-4 font-mono text-lime-400 font-bold">
-                            Rp {{ number_format($order->total_price, 0, ',', '.') }}
+                            Rp {{ number_format($order->total_amount, 0, ',', '.') }}
                         </td>
 
                         <td class="px-6 py-4">
@@ -69,15 +69,15 @@
                                     'cancelled' => 'text-red-400 bg-red-500/10 border-red-500/20',
                                     'returned' => 'text-orange-400 bg-orange-500/10 border-orange-500/20',
                                 ];
-                                $colorClass = $statusColors[$order->status] ?? 'text-slate-400';
+                                $colorClass = $statusColors[$order->order_status] ?? 'text-slate-400';
                             @endphp
                             <span class="px-2 py-1 rounded text-xs font-bold border {{ $colorClass }} uppercase">
-                                {{ $order->status }}
+                                {{ $order->order_status }}
                             </span>
                         </td>
 
                         <td class="px-6 py-4 text-center">
-                            <a href="{{ route('admin.transactions.show', $order->id) }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-navy-800 hover:bg-lime-400 hover:text-navy-950 text-slate-300 rounded-lg transition text-xs font-bold">
+                            <a href="{{ route('admin.orders.show', $order->id) }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-navy-800 hover:bg-lime-400 hover:text-navy-950 text-slate-300 rounded-lg transition text-xs font-bold">
                                 <i data-lucide="eye" class="w-3 h-3"></i> Detail
                             </a>
                         </td>
