@@ -44,8 +44,7 @@
                 </svg>
             </button>
         </div>
-
-<<<<<<< Updated upstream
+        
         <div :class="{'block': mobileOpen, 'hidden': !mobileOpen}" 
              class="items-center justify-between w-full md:flex md:w-auto md:order-1" 
              id="navbar-sticky">

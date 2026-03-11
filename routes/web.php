@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\File;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\DesignController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,5 +66,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/transactions/{order}', [App\Http\Controllers\Admin\AdminTransactionController::class, 'update'])->name('admin.transactions.update');
         
     });
+    
+// for design routes
+Route::middleware('auth')->group(function () {
+    Route::post('/save-design', [DesignController::class, 'store'])->name('design.store');
+});
 
 });
