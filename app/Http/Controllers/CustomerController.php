@@ -161,6 +161,7 @@ class CustomerController extends Controller
         return redirect()->route('cart')->with('status', 'Produk berhasil ditambahkan ke keranjang.');
     }
 
+
     public function addDesignToCart(Request $request, Product $product)
     {
         $request->validate([
@@ -170,36 +171,50 @@ class CustomerController extends Controller
             'preview_image' => 'required|string', // Base64 dataURL
         ]);
 
-        // 1. Simpan gambar preview dari Base64 ke dalam storage (opsional tapi disarankan)
-        $imageParts = explode(";base64,", $request->preview_image);
-        $imageTypeAux = explode("image/", $imageParts[0]);
-        $imageType = $imageTypeAux[1];
-        $imageBase64 = base64_decode($imageParts[1]);
-        $fileName = 'designs/design_' . uniqid() . '.' . $imageType;
-        
-        \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $imageBase64);
+        try {
+            // 1. Simpan gambar preview dari Base64 ke dalam storage
+            $imageParts = explode(";base64,", $request->preview_image);
+            $imageTypeAux = explode("image/", $imageParts[0]);
+            $imageType = $imageTypeAux[1];
+            $imageBase64 = base64_decode($imageParts[1]);
+            $fileName = 'designs/design_' . uniqid() . '.' . $imageType;
+            
+            \Illuminate\Support\Facades\Storage::disk('public')->put($fileName, $imageBase64);
 
-        // 2. Simpan record Design ke database
-        $design = \App\Models\Design::create([
-            'user_id' => auth()->id(),
-            'product_id' => $product->id,
-            'design_json' => $request->design_json,
-            'preview_image' => $fileName,
-            'status' => 'pending'
-        ]);
+            // 2. Simpan record Design ke database
+            $design = \App\Models\Design::create([
+                'user_id' => auth()->id(),
+                'product_id' => $product->id,
+                'design_json' => $request->design_json,
+                'preview_image' => $fileName,
+                'status' => 'pending'
+            ]);
 
-        // 3. Masukkan ke keranjang
-        $cart = \App\Models\Cart::firstOrCreate(['user_id' => auth()->id()]);
+            // 3. Masukkan ke keranjang
+            $cart = \App\Models\Cart::firstOrCreate(['user_id' => auth()->id()]);
 
-        // Karena ini desain kustom, kita buat item baru di cart (tidak menggabungkan quantity meski produk sama)
-        $cart->items()->create([
-            'product_id' => $product->id,
-            'design_id' => $design->id,
-            'size' => $request->size,
-            'quantity' => $request->quantity,
-        ]);
+            // Karena ini desain kustom, kita buat item baru di cart
+            $cart->items()->create([
+                'product_id' => $product->id,
+                'design_id' => $design->id,
+                'size' => $request->size,
+                'quantity' => $request->quantity,
+            ]);
 
-        return redirect()->route('customer.cart')->with('status', 'Desain kustom Anda berhasil disimpan ke keranjang.');
+            // FIX: Return a JSON response so the JS fetch() can read it!
+            return response()->json([
+                'success' => true,
+                'message' => 'Desain kustom Anda berhasil disimpan ke keranjang.',
+                'redirect_url' => route('cart')
+            ], 200);
+
+        } catch (\Exception $e) {
+            // If the Base64 decode or database fails, send the error back to JS
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan di server: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function removeCartItem($id)

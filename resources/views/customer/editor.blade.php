@@ -11,8 +11,11 @@
 <script>
     const IS_LOGGED_IN = @json(Auth::check());
     const LOGIN_URL = "{{ route('login') }}";
+    
+    // UPDATE THIS: Use the route name and pass the $product variable from your controller
+    // This will generate something like "/cart/add-design/5"
+    const SAVE_DESIGN_URL = "{{ route('cart.addDesign', $product->id) }}"; 
 </script>
-
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
     tailwind.config = {
@@ -916,53 +919,72 @@ document.getElementById('btn-export-img').addEventListener('click', () => {
 
 document.getElementById('btn-cart').addEventListener('click', async () => {
     if (!IS_LOGGED_IN) {
-        showToast('Silakan login terlebih dahulu untuk menyimpan ke keranjang!','error');
+        showToast('Silakan login terlebih dahulu!', 'error');
         setTimeout(() => { window.location.href = LOGIN_URL; }, 1500);
         return;
     }
 
     const roster = state.design.back.roster.players;
-    if (roster.length === 0) { showToast('Tambahkan minimal 1 player ke roster dulu!','error'); return; }
-
     const sizeCart = document.getElementById('jersey-size-cart').value;
-    if (!sizeCart) { showToast('Pilih ukuran jersey terlebih dahulu!','error'); return; }
+
+    if (roster.length === 0) {
+        showToast('Tambahkan minimal 1 player ke roster!', 'error');
+        return;
+    }
+    if (!sizeCart) {
+        showToast('Pilih ukuran jersey terlebih dahulu!', 'error');
+        return;
+    }
 
     toggleLoader(true, 'Menyimpan ke keranjang...');
 
+    // ==========================================
+    // UPDATED PAYLOAD TO MATCH LARAVEL BACKEND
+    // ==========================================
     const payload = {
-        status: 'cart',
         size: sizeCart,
-        design_data: {
+        quantity: roster.length, // 1. Added the required quantity field
+        
+        // 2. Renamed to design_json and stringified the object
+        design_json: JSON.stringify({
             config: state.config,
             front_zones: state.design.front.zones,
             back_zones: state.design.back.zones,
-        },
-        roster_data: roster
+            roster_data: roster
+        }),
+
+        // 3. Renamed to preview_image (using the front view as the main thumbnail)
+        preview_image: fabricFront.canvas.toDataURL({ format: 'png', quality: 0.5 })
     };
 
     try {
-        const response = await fetch('/save-design', {
+        const response = await fetch(SAVE_DESIGN_URL, { // This now points to /cart/add-design/{id}
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
             body: JSON.stringify(payload)
         });
+
         const result = await response.json();
+
         if (response.ok) {
-            toggleLoader(false);
-            showToast(`✓ ${roster.length} jersey ditambahkan ke cart!`,'success');
+            showToast(`✓ Berhasil disimpan ke keranjang!`, 'success');
+            setTimeout(() => {
+                            window.location.href = result.redirect_url;
+                        }, 1000); // 1 second delay so they can see the success toast
         } else {
-            toggleLoader(false);
-            showToast('Gagal menyimpan. Coba lagi.','error');
-            console.error(result);
+            console.error('Validation/Server Error:', result);
+            showToast(result.message || 'Gagal menyimpan design.', 'error');
         }
     } catch (error) {
+        console.error('Connection Error:', error);
+        showToast('Terjadi kesalahan koneksi ke server.', 'error');
+    } finally {
         toggleLoader(false);
-        showToast('Terjadi kesalahan koneksi.','error');
-        console.error(error);
     }
 });
 
