@@ -1,0 +1,24 @@
+<svg width="65" height="126" viewBox="0 0 65 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="shade right arm">
+<g id="Clip path group">
+<mask id="mask0_12_10" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="120">
+<g id="clippath-2">
+<path id="Vector" d="M0.0100098 92.31V92.33C4.66001 101.73 10.07 110.72 16.18 119.23C33.36 112.48 49.53 103.14 63.97 91.63C51.46 65.86 38.74 39.67 26.02 13.49C23.63 8.58 21.13 3.52 16.98 0C3.96998 28.5 0.75 60.41 0 92.3L0.0100098 92.31Z" fill="white"/>
+</g>
+</mask>
+<g mask="url(#mask0_12_10)">
+<g id="Group">
+<g id="Group_2">
+<path id="Vector_2" d="M29.38 46.66C24.47 34.41 17.84 22.85 9.76001 12.42" stroke="#E4E5EB" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M44.49 89.52C36.86 97.53 27.78 104.14 17.81 108.93" stroke="#E4E5EB" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M16.11 102.65C21.8 99.98 26.81 95.89 30.57 90.86" stroke="#E4E5EB" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
+</g>
+<path id="Vector_5" d="M63.98 91.64C49.54 103.14 33.37 112.48 16.19 119.24" stroke="#797E91" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="Vector_6" opacity="0.09" style="mix-blend-mode:multiply">
+<path d="M1.07999 69.35C0.509987 76.97 0.19001 84.64 0.0100098 92.31V92.33C4.66001 101.73 10.07 110.72 16.18 119.23C17.65 121.27 19.15 123.28 20.68 125.26C26.95 122.92 32.99 120.19 38.79 117.12C27.27 97.4 12.56 80.77 1.07999 69.35Z" fill="#383838"/>
+</g>
+</g>
+</svg>
