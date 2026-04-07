@@ -406,9 +406,116 @@ const COLLAR_LIBRARY = {
         { type: 'rect', x: 96.5, y: 45.5, w: 8, h: 6, fillAdj: 0, stroke: '#797E91', strokeW: 0.6, offsetX: 0, offsetY: 0 },
         { type: 'rect', x: 96.5, y: 24.5, w: 8, h: 6, fillAdj: 0, stroke: '#797E91', strokeW: 0.6, offsetX: 0, offsetY: 0 }
     ],
-    'vneck_1': DUMMY_COLLAR, 'vneck_2': DUMMY_COLLAR, 'vneck_3': DUMMY_COLLAR,
-    'vpasung': DUMMY_COLLAR, 'vpasung_combo': DUMMY_COLLAR, 'vclassic_combo': DUMMY_COLLAR,
-    'vkerah': DUMMY_COLLAR, 'wangki': DUMMY_COLLAR, 'vclassic': DUMMY_COLLAR
+    'vneck_1': [
+        // 1. Back Collar Fill (Bagian belakang paling atas)
+        { 
+            type: 'path', 
+            d: "M94.9101 2.66C94.5601 3.61 94.1701 4.54 93.7301 5.46C81.0101 10.96 66.2201 13.41 53.4201 13.41H53.2001C40.4101 13.41 25.6201 10.96 12.9001 5.46C12.4601 4.54 12.0701 3.6 11.7201 2.65C13.6801 1.93 15.6301 1.22 17.5901 0.5C29.3801 4.76 42.2801 5.85 53.3101 5.85C64.3401 5.85 77.2401 4.75 89.0401 0.5C91.0001 1.22 92.9501 1.93 94.9101 2.66Z", 
+            fillAdj: -35, 
+            stroke: '#292F44', 
+            strokeW: 0.7, 
+            offsetX: -7.5, 
+            offsetY: 2 
+        },
+        // 2. Inner Back Triangle (Lubang leher bagian dalam belakang)
+        { 
+            type: 'path', 
+            d: "M53.0001 48C23.4721 40.0742 14.1114 30.3501 11.0001 3.5C43.8131 12.6183 62.3369 13.1145 96.0001 3.5C91.3061 29.6923 81.8919 39.4441 53.0001 48Z", 
+            fillAdj: -15, 
+            stroke: '#292F44', 
+            strokeW: 0.7, 
+            offsetX: -7.5, 
+            offsetY: -3 
+        },
+        // 3. Back Collar Trim/Outline (Detail garis tepi leher belakang)
+        { 
+            type: 'path', 
+            d: "M96.5001 2.67506C96.1383 3.63168 95.7351 4.56816 95.2803 5.49458C82.1306 11.0329 66.841 13.5 53.6087 13.5H53.3812C40.1592 13.5 24.8696 11.0329 11.72 5.49458C11.2651 4.56816 10.862 3.62161 10.5001 2.66499C12.5263 1.93997 14.5422 1.22502 16.5684 0.5C28.7566 4.7897 42.0924 5.8873 53.495 5.8873C64.8975 5.8873 78.2333 4.77963 90.4318 0.5C92.458 1.22502 94.4739 1.93997 96.5001 2.67506Z", 
+            fillAdj: 5, 
+            stroke: '#292F44', 
+            strokeW: 0.6, 
+            offsetX: -7.5, 
+            offsetY: 2 
+        },
+        // 4. Main Front V-Neck (Bentuk V bagian depan)
+        { 
+            type: 'path', 
+            d: "M0.50013 6.95144L10.6421 3C12.7242 9.46723 17.6675 21.8958 29.2065 33.1075C37.938 41.5846 46.9515 46.0146 52.7412 48.2843C58.8801 45.7822 69.3578 40.6002 79.2983 30.2499C89.1715 19.9816 94.0343 9.28949 96.3582 3C99.7433 4.24422 103.128 5.48845 106.5 6.73267C103.075 14.6219 96.6269 26.9 84.9133 38.8091C72.9847 50.9368 60.6801 57.5408 52.8486 61C45.4067 57.9099 32.9006 51.6068 20.9989 39.2466C9.32563 27.1188 3.4151 14.5398 0.50013 6.95144Z", 
+            fillAdj: 15, 
+            stroke: '#292F44', 
+            strokeW: 0.8, 
+            offsetX: 2.8, 
+            offsetY: -1 
+        }
+    ], 
+    'vneck_2': [
+        { 
+            type: 'path', 
+            d: "M94.9101 2.66C94.5601 3.61 94.1701 4.54 93.7301 5.46C81.0101 10.96 66.2201 13.41 53.4201 13.41H53.2001C40.4101 13.41 25.6201 10.96 12.9001 5.46C12.4601 4.54 12.0701 3.6 11.7201 2.65C13.6801 1.93 15.6301 1.22 17.5901 0.5C29.3801 4.76 42.2801 5.85 53.3101 5.85C64.3401 5.85 77.2401 4.75 89.0401 0.5C91.0001 1.22 92.9501 1.93 94.9101 2.66Z", 
+            fillAdj: -35, 
+            stroke: '#292F44', 
+            strokeW: 0.7, 
+            offsetX: -7.5, 
+            offsetY: 2 
+        },
+        // 2. Inner Back Triangle
+        { 
+            type: 'path', 
+            d: "M53.0001 48C23.4721 40.0742 14.1114 30.3501 11.0001 3.5C43.8131 12.6183 62.3369 13.1145 96.0001 3.5C91.3061 29.6923 81.8919 39.4441 53.0001 48Z", 
+            fillAdj: -15, 
+            stroke: '#292F44', 
+            strokeW: 0.7, 
+            offsetX: -7.5, 
+            offsetY: -3 
+        },
+        // 3. Back Collar Trim
+        { 
+            type: 'path', 
+            d: "M96.5001 2.67506C96.1383 3.63168 95.7351 4.56816 95.2803 5.49458C82.1306 11.0329 66.841 13.5 53.6087 13.5H53.3812C40.1592 13.5 24.8696 11.0329 11.72 5.49458C11.2651 4.56816 10.862 3.62161 10.5001 2.66499C12.5263 1.93997 14.5422 1.22502 16.5684 0.5C28.7566 4.7897 42.0924 5.8873 53.495 5.8873C64.8975 5.8873 78.2333 4.77963 90.4318 0.5C92.458 1.22502 94.4739 1.93997 96.5001 2.67506Z", 
+            fillAdj: 5, 
+            stroke: '#292F44', 
+            strokeW: 0.6, 
+            offsetX: -7.5, 
+            offsetY: 2 
+        },
+        // 4. Main Front V-Neck
+        { 
+            type: 'path', 
+            d: "M0.50013 6.95144L10.6421 3C12.7242 9.46723 17.6675 21.8958 29.2065 33.1075C37.938 41.5846 46.9515 46.0146 52.7412 48.2843C58.8801 45.7822 69.3578 40.6002 79.2983 30.2499C89.1715 19.9816 94.0343 9.28949 96.3582 3C99.7433 4.24422 103.128 5.48845 106.5 6.73267C103.075 14.6219 96.6269 26.9 84.9133 38.8091C72.9847 50.9368 60.6801 57.5408 52.8486 61C45.4067 57.9099 32.9006 51.6068 20.9989 39.2466C9.32563 27.1188 3.4151 14.5398 0.50013 6.95144Z", 
+            fillAdj: 15, 
+            stroke: '#292F44', 
+            strokeW: 0.8, 
+            offsetX: 2.8, 
+            offsetY: -1 
+        },
+        // 5. Decorative Tab Base (Disesuaikan offsetX/Y agar ke ujung bawah V)
+        { 
+            type: 'path', 
+            d: "M53.0001 48.5L54.0001 48L65.0001 55L64.0001 55.5L53.0001 48.5Z", 
+            fillAdj: -50, 
+            stroke: '#1a1a1a', // Kasih stroke tipis biar keliatan pemisahnya
+            strokeW: 0.2,
+            offsetX: -49,      // Ditarik ke tengah-kanan
+            offsetY: -46       // Didorong ke bawah
+        },
+        // 6. Decorative Tab Highlight (Disesuaikan offsetX/Y agar pas menumpuk di Base)
+        { 
+            type: 'path', 
+            d: "M53.5001 48L56.5001 47L66.5001 53.5L64.5001 55L53.5001 48Z", 
+            fillAdj: 30, 
+            stroke: '#292F44', 
+            strokeW: 0.2,
+            offsetX: -51,    // Sedikit berbeda biar ada aksen shadow
+            offsetY: -45 
+        }
+    ],
+    'vneck_3': DUMMY_COLLAR,
+    'vpasung': DUMMY_COLLAR, 
+    'vpasung_combo': DUMMY_COLLAR, 
+    'vclassic_combo': DUMMY_COLLAR,
+    'vkerah': DUMMY_COLLAR, 
+    'wangki': DUMMY_COLLAR, 
+    'vclassic': DUMMY_COLLAR
 };
 
 const SHADE_BODY_LINES = [
