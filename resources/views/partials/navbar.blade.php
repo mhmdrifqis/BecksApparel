@@ -1,4 +1,4 @@
-<nav class="bg-navy-900 fixed w-full z-50 top-0 start-0 border-b border-slate-800" 
+<nav class="bg-navy-900 fixed w-full z-[90] top-0 start-0 border-b border-slate-800" 
      x-data="{ mobileOpen: false }">
     
     <div class="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4">

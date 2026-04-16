@@ -58,10 +58,15 @@
     
     <!-- Project styles -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    
+    @stack('styles')
 
     <!-- Alpine.js -->
+    @unless(View::hasSection('skip_alpine_cdn'))
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    @endunless
     <script src="{{ asset('js/login-app.js') }}"></script>
+    
     
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -123,6 +128,6 @@
             });
         });
     </script>
-
+    @stack('scripts')
 </body>
 </html>
