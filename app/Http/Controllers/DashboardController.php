@@ -17,50 +17,31 @@ class DashboardController extends Controller
         // 1. LOGIKA DASHBOARD ADMIN (Full Access)
         // ====================================================
         if ($user->isAdmin()) {
-            // Live Stats Query
+            // Data Dummy Statistik
             $stats = [
-                'total_pesanan_harian' => \App\Models\Order::whereDate('created_at', now()->today())->count(),
-                'total_pesanan_bulanan' => \App\Models\Order::whereMonth('created_at', now()->month)
-                                            ->whereYear('created_at', now()->year)->count(),
-                'pendapatan_bulan_ini' => \App\Models\Order::whereMonth('created_at', now()->month)
-                                            ->whereYear('created_at', now()->year)
-                                            ->where('payment_status', 'paid')
-                                            ->whereNotIn('order_status', ['pending', 'cancelled', 'returned'])
-                                            ->sum('total_amount'), 
-                'stok_kritis' => \App\Models\Product::where('stock', '<=', 5)->count(), 
-                'pesanan_pending' => \App\Models\Order::where('order_status', 'pending')->count(),
-                'pesanan_produksi' => \App\Models\Order::where('order_status', 'production')->count(),
-                'pesanan_selesai' => \App\Models\Order::whereIn('order_status', ['shipped', 'completed'])->count(),
+                'total_pesanan_harian' => 12,
+                'total_pesanan_bulanan' => 345,
+                'pendapatan_bulan_ini' => 45000000, 
+                'stok_kritis' => 5, 
+                'pesanan_pending' => 8,
+                'pesanan_produksi' => 15,
+                'pesanan_selesai' => 120,
             ];
 
-            // Recent Orders (5 pesanan terakhir)
-            $recentOrders = \App\Models\Order::with('user')
-                ->latest()
-                ->take(5)
-                ->get();
-
-            // Data Grafik Live (6 Bulan Terakhir)
+            // Data Grafik
             $chartData = [
-                'labels' => [],
-                'data' => []
+                'labels' => ['Agu', 'Sep', 'Okt', 'Nov', 'Des', 'Jan'],
+                'data' => [15000000, 23000000, 18000000, 32000000, 45000000, 41000000]
             ];
             
-            for ($i = 5; $i >= 0; $i--) {
-                $monthStr = now()->subMonths($i)->translatedFormat('M Y');
-                $monthNum = now()->subMonths($i)->month;
-                $yearNum = now()->subMonths($i)->year;
-                
-                $monthlyRevenue = \App\Models\Order::whereMonth('created_at', $monthNum)
-                                    ->whereYear('created_at', $yearNum)
-                                    ->where('payment_status', 'paid')
-                                    ->whereNotIn('order_status', ['pending', 'cancelled', 'returned'])
-                                    ->sum('total_amount');
-                                    
-                $chartData['labels'][] = $monthStr;
-                $chartData['data'][] = (float) $monthlyRevenue;
-            }
+            // Aktivitas Log
+            $activities = [
+                ['user' => 'Budi Santoso', 'action' => 'Membuat pesanan baru #ORD-1005', 'time' => '5 menit lalu'],
+                ['user' => 'Siti Aminah', 'action' => 'Melakukan pembayaran via QRIS', 'time' => '10 menit lalu'],
+                ['user' => 'System', 'action' => 'Stok Kain Cotton Combed 30s menipis', 'time' => '1 jam lalu', 'type' => 'alert'],
+            ];
 
-            return view('dashboard.admin', compact('stats', 'recentOrders', 'chartData'));
+            return view('dashboard.admin', compact('stats', 'chartData', 'activities'));
         }
 
         // ====================================================
@@ -82,8 +63,8 @@ class DashboardController extends Controller
                 'data' => [800, 1200, 1500, 2100, 2500] // Dalam Juta
             ];
 
-            // Ubah view ke 'dashboard.manajemen'
-            return view('dashboard.manajemen', compact('kpi', 'revenueTrend'));
+            // Ubah view ke 'dashboard.management'
+            return view('dashboard.management', compact('kpi', 'revenueTrend'));
         }
         
         // ====================================================
@@ -104,22 +85,36 @@ class DashboardController extends Controller
                 ['invoice' => 'INV-005', 'item' => 'Kaos Event', 'qty' => 100, 'deadline' => 'Besok', 'status' => 'Cetak'],
             ];
 
-            // Ubah view ke 'dashboard.produksi'
-            return view('dashboard.produksi', compact('productionStats', 'priorityOrders'));
+            // Ubah view ke 'dashboard.production'
+            return view('dashboard.production', compact('productionStats', 'priorityOrders'));
         }
 
         // ====================================================
         // 4. LOGIKA DASHBOARD PELANGGAN (Pesanan Saya)
         // ====================================================
         if ($user->isPelanggan()) {
-            // Live Query: Ambil 5 pesanan terbaru milik pelanggan ini
-            $myOrders = \App\Models\Order::where('user_id', $user->id)
-                ->latest()
-                ->take(5)
-                ->get();
+            // Data Pesanan Pelanggan
+            $myOrders = [
+                [
+                    'id' => 'ORD-1001', 
+                    'invoice' => 'INV-20260120-001',
+                    'date' => '20 Jan 2026',
+                    'status' => 'Selesai', 
+                    'total' => 125000, 
+                    'resi' => 'JNE-8829100'
+                ],
+                [
+                    'id' => 'ORD-1002', 
+                    'invoice' => 'INV-20260125-002',
+                    'date' => '25 Jan 2026',
+                    'status' => 'Proses Jahit', 
+                    'total' => 450000, 
+                    'resi' => null
+                ],
+            ];
 
-            // Ubah view ke 'dashboard.pelanggan'
-            return view('dashboard.pelanggan', compact('myOrders'));
+            // Ubah view ke 'dashboard.customers'
+            return view('dashboard.customers', compact('myOrders'));
         }
 
         // Fallback jika tidak ada role yang cocok

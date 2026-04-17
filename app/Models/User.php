@@ -21,7 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'phone',
+        'nomor_telepon',
         'password',
         'role_id',
     ];
@@ -60,25 +60,9 @@ class User extends Authenticatable
     /**
      * Check if user has specific role.
      */
-    public function hasRole($role)
+    public function hasRole(string $roleName): bool
     {
-        // 1. Normalisasi teks menjadi huruf kecil semua biar aman
-        $role = strtolower($role);
-
-        // 2. Daftar Mapping sesuai Database Seeder kita
-        $roles = [
-            'admin'     => 1,
-            'pimpinan'  => 2,
-            'produksi'  => 3, // Di route tulis 'produksi', di DB id 3
-            'pelanggan' => 4,
-        ];
-
-        // 3. Cek apakah role_id user sama dengan yang diminta
-        if (isset($roles[$role])) {
-            return $this->role_id === $roles[$role];
-        }
-
-        return false;
+        return $this->role && $this->role->name === $roleName;
     }
 
     /**
@@ -86,8 +70,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        // return $this->hasRole('admin');
-        return $this->role_id === 1;
+        return $this->hasRole('admin');
     }
 
     /**
@@ -95,19 +78,7 @@ class User extends Authenticatable
      */
     public function isManajemen(): bool
     {
-        // return $this->hasRole('manajemen');
-        return $this->role_id === 2;
-    
-    }
-
-
-    /**
-     * Cek apakah user adalah Tim Produksi.
-     */
-    public function isProduksi(): bool
-    {
-        // return $this->hasRole('produksi');
-        return $this->role_id === 3;    
+        return $this->hasRole('manajemen');
     }
 
     /**
@@ -115,8 +86,15 @@ class User extends Authenticatable
      */
     public function isPelanggan(): bool
     {
-        // return $this->hasRole('pelanggan');
-        return $this->role_id === 4;
+        return $this->hasRole('pelanggan');
+    }
+
+    /**
+     * Cek apakah user adalah Tim Produksi.
+     */
+    public function isProduksi(): bool
+    {
+        return $this->hasRole('produksi');
     }
 
     /**
@@ -124,7 +102,7 @@ class User extends Authenticatable
      */
     public function getRoleName(): ?string
     {
-        return $this->role ? $this->role->role_name : null;
+        return $this->role ? $this->role->name : null;
     }
 
     /**
@@ -133,13 +111,5 @@ class User extends Authenticatable
     public function getRoleDisplayName(): ?string
     {
         return $this->role ? $this->role->display_name : null;
-    }
-
-    /**
-     * Get the orders for the user.
-     */
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
     }
 }

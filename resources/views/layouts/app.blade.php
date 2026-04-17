@@ -12,6 +12,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        window.BASE_URL = "{{ url('/') }}";
         tailwind.config = {
             theme: {
                 extend: {
@@ -58,15 +59,10 @@
     
     <!-- Project styles -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    
-    @stack('styles')
 
     <!-- Alpine.js -->
-    @unless(View::hasSection('skip_alpine_cdn'))
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    @endunless
     <script src="{{ asset('js/login-app.js') }}"></script>
-    
     
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -88,46 +84,12 @@
     @include('partials.footer')
     
     @include('partials.login-modal')
+    
+    @unless(auth()->check() && auth()->user()->isAdmin())
+    <!-- Chatbot Widget -->
+    <div id="chat-widget"></div>
+    @endunless
 
-        <!-- Global Loader Overlay -->
-    <div id="global-loader" class="hidden">
-        <div class="loader-container">
-            <div class="spinner"></div>
-            <p class="loader-text">Sedang memproses...</p>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loader = document.getElementById('global-loader');
-
-            // 1. Munculkan loader saat form dikirim (Submit)
-            document.addEventListener('submit', function(e) {
-                loader.classList.remove('hidden');
-            });
-
-            // 2. Munculkan loader saat berpindah halaman (Klik Link)
-            document.addEventListener('click', function(e) {
-                const link = e.target.closest('a');
-                if (link && 
-                    link.href && 
-                    !link.hash && 
-                    link.target !== '_blank' && 
-                    !link.getAttribute('download') &&
-                    link.getAttribute('href') !== '#' &&
-                    link.href.startsWith(window.location.origin)) {
-                    loader.classList.remove('hidden');
-                }
-            });
-
-            // 3. Sembunyikan loader jika user kembali menggunakan tombol 'Back' browser
-            window.addEventListener('pageshow', function(event) {
-                if (event.persisted) {
-                    loader.classList.add('hidden');
-                }
-            });
-        });
-    </script>
-    @stack('scripts')
+    @vite(['resources/js/app.jsx'])
 </body>
 </html>

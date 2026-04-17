@@ -20,11 +20,6 @@ function loginApp() {
         handleLogin() {
             if (!this.email || !this.password) { alert('Silakan isi email dan password!'); return; }
             const target = this.roles[this.activeRole].redirect;
-            
-            // Munculkan Global Loader
-            const globalLoader = document.getElementById('global-loader');
-            if (globalLoader) globalLoader.classList.remove('hidden');
-
             const btn = document.querySelector('button[type="submit"]');
             if (btn) { const original = btn.innerHTML; btn.innerHTML = '<span class="animate-spin mr-2">⏳</span> MEMPROSES...'; btn.classList.add('opacity-75','cursor-not-allowed'); }
             setTimeout(() => { window.location.href = target; }, 800);

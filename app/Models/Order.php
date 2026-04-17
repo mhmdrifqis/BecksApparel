@@ -19,10 +19,4 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
-
-    // Relasi: Order punya satu Payment
-    public function payment()
-    {
-        return $this->hasOne(Payment::class);
-    }
 }

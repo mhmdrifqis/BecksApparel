@@ -11,21 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-            // 1. BUAT TABEL ROLES DULU
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('role_name');
-        });
-
-        // 2. BARU BUAT TABEL USERS (Update sesuai ERD baru)
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('role_id')->constrained('roles'); // Relasi ke roles
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('phone')->nullable(); // Tambahan dari ERD
             $table->rememberToken();
             $table->timestamps();
         });

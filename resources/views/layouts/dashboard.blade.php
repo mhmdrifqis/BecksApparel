@@ -6,9 +6,10 @@
     <title>@yield('title', 'Dashboard') - Becks Apparel</title>
     
     <link rel="icon" href="{{ asset('images/Logo-Becks-Crop.png') }}" type="image/png">
-     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        window.BASE_URL = "{{ url('/') }}";
         tailwind.config = {
             theme: {
                 extend: {
@@ -24,7 +25,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
-<body class="bg-navy-950 font-sans antialiased text-slate-300" x-data="{ sidebarOpen: false, userDropdown: false }">
+<body class="bg-navy-950 font-sans antialiased text-slate-300" x-data="{ sidebarOpen: false, userDropdownOpen: false }">
 
     <nav class="fixed top-0 z-50 w-full bg-navy-900 border-b border-slate-800">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
@@ -47,151 +48,373 @@
                     </a>
                 </div>
 
-                <div class="flex items-center gap-3">
-                    
-                    <!-- Notification Bell -->
-                    <div class="relative" x-data="{ notifDropdown: false }">
-                        <button @click="notifDropdown = !notifDropdown" @click.away="notifDropdown = false" class="relative p-2 text-slate-400 hover:text-lime-400 focus:outline-none transition rounded-full hover:bg-navy-800">
-                            <i data-lucide="bell" class="w-6 h-6"></i>
-                            @if(auth()->user() && auth()->user()->unreadNotifications->count() > 0)
-                            <span class="absolute top-1 right-1 flex h-3 w-3 items-center justify-center">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 text-[8px] font-bold text-white items-center justify-center">
-                                    {{ auth()->user()->unreadNotifications->count() }}
-                                </span>
-                            </span>
-                            @endif
-                        </button>
-                        
-                        <div x-show="notifDropdown" x-transition class="z-50 absolute right-0 top-12 my-2 w-80 text-base bg-navy-900 border border-slate-700 rounded-lg shadow-xl" style="display: none;">
-                            <div class="px-4 py-3 border-b border-slate-800 flex justify-between items-center bg-navy-900/50 rounded-t-lg">
-                                <h3 class="font-bold text-white">Notifikasi</h3>
-                                @if(auth()->user() && auth()->user()->unreadNotifications->count() > 0)
-                                    <span class="text-xs font-bold text-lime-400">{{ auth()->user()->unreadNotifications->count() }} Baru</span>
-                                @endif
-                            </div>
-                            <div class="max-h-64 overflow-y-auto custom-scrollbar divide-y divide-slate-800">
-                                @if(auth()->user())
-                                    @forelse(auth()->user()->notifications->take(5) as $notification)
-                                        <a href="{{ $notification->data['url'] ?? '#' }}" class="block px-4 py-3 hover:bg-navy-800 transition {{ $notification->unread() ? 'bg-navy-800/30' : '' }}">
-                                            <div class="flex items-start gap-3">
-                                                <div class="w-8 h-8 rounded-full flex-shrink-0 {{ $notification->unread() ? 'bg-lime-400/10 text-lime-400' : 'bg-slate-800 text-slate-500' }} flex items-center justify-center">
-                                                    <i data-lucide="{{ isset($notification->data['type']) && $notification->data['type'] == 'new_order' ? 'shopping-cart' : 'info' }}" class="w-4 h-4"></i>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold {{ $notification->unread() ? 'text-white' : 'text-slate-300' }}">{{ $notification->data['title'] ?? 'Pemberitahuan' }}</p>
-                                                    <p class="text-xs text-slate-400 mt-0.5 line-clamp-2">{!! $notification->data['message'] ?? '' !!}</p>
-                                                    <p class="text-[10px] text-slate-500 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    @empty
-                                        <div class="px-4 py-6 text-center text-slate-500 text-sm">
-                                            <i data-lucide="bell-off" class="w-8 h-8 mx-auto mb-2 opacity-30"></i>
-                                            Belum ada notifikasi baru
-                                        </div>
-                                    @endforelse
-                                @endif
-                            </div>
-                            <div class="px-4 py-2 border-t border-slate-800 text-center bg-navy-900/50 rounded-b-lg">
-                                <a href="#" class="text-xs font-bold text-lime-400 hover:text-white transition">Tandai Semua Dibaca</a>
-                            </div>
-                            
-                            @php 
-                                // Opsi: menandai dibaca saat list dropdown dibuka
-                                // \Illuminate\Support\Facades\DB::table('notifications')->where('notifiable_id', auth()->id())->update(['read_at' => now()]);
-                                // Untuk sekarang biarkan dulu
-                            @endphp
+                <div class="flex items-center">
+                    <div class="flex items-center ms-3 relative">
+                        <div>
+                            <button @click="userDropdownOpen = !userDropdownOpen" @click.away="userDropdownOpen = false" type="button" class="flex text-sm bg-navy-800 rounded-full focus:ring-4 focus:ring-slate-700" aria-expanded="false">
+                                <span class="sr-only">Open user menu</span>
+                                <div class="w-8 h-8 rounded-full bg-lime-400 flex items-center justify-center text-navy-950 font-bold border-2 border-navy-800">
+                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                </div>
+                            </button>
                         </div>
-                    </div>
-
-                    <!-- User Profile Dropdown -->
-                    <div class="flex items-center relative">
-                        <button @click="userDropdown = !userDropdown" @click.away="userDropdown = false" class="flex text-sm bg-navy-800 rounded-full focus:ring-4 focus:ring-slate-700">
-                            <div class="w-8 h-8 rounded-full bg-lime-400 flex items-center justify-center text-navy-950 font-bold border-2 border-navy-800">
-                                {{ substr(Auth::user()->name, 0, 1) }}
-                            </div>
-                        </button>
                         
-                        <div x-show="userDropdown" x-transition class="z-50 absolute right-0 top-12 my-2 text-base list-none bg-navy-900 divide-y divide-slate-700 rounded shadow-xl border border-slate-700 w-48" style="display: none;">
-                            <div class="px-4 py-3">
-                                <p class="text-sm text-white font-bold truncate">{{ Auth::user()->name }}</p>
-                                <p class="text-xs font-medium text-slate-400 truncate">{{ Auth::user()->email }}</p>
+                        <div x-show="userDropdownOpen" 
+                             x-transition
+                             class="z-50 absolute right-0 top-10 my-4 text-base list-none bg-navy-900 divide-y divide-slate-700 rounded shadow-xl border border-slate-700 w-48" style="display: none;">
+                            <div class="px-4 py-3" role="none">
+                                <p class="text-sm text-white font-bold" role="none">{{ Auth::user()->name }}</p>
+                                <p class="text-xs font-medium text-slate-400 truncate" role="none">{{ Auth::user()->email }}</p>
                             </div>
-                            <ul class="py-1">
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="{{ route('home') }}" class="block px-4 py-2 text-sm text-slate-300 hover:bg-navy-800 hover:text-lime-400" role="menuitem">Halaman Utama</a>
+                                </li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-navy-800 hover:text-red-300 font-bold transition">Keluar</button>
+                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-navy-800 hover:text-red-300 font-bold" role="menuitem">Sign out</button>
                                     </form>
                                 </li>
                             </ul>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </nav>
 
     <aside id="logo-sidebar" 
            :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
-           class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform bg-navy-900 border-r border-slate-800 sm:translate-x-0">
+           class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform bg-navy-900 border-r border-slate-800 sm:translate-x-0" aria-label="Sidebar">
         <div class="h-full px-3 pb-4 overflow-y-auto bg-navy-900">
             <ul class="space-y-2 font-medium">
                 
-                @include('layouts.sidebar-menu')
+                <li>
+                    <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-white rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('dashboard') ? 'bg-navy-800 text-lime-400' : '' }}">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                        <span class="ms-3">Dashboard</span>
+                    </a>
+                </li>
 
+                @if(auth()->user()->isAdmin())
+                    
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Master Data</span>
+                    </li>
+                    
+                    <li>
+                        <a href="{{ route('admin.users.index') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('admin.users.*') ? 'bg-navy-800 text-lime-400' : '' }}">
+                            <i data-lucide="users" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Manajemen User</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('admin.products.index') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('admin.products.*') ? 'bg-navy-800 text-lime-400' : '' }}">
+                            <i data-lucide="package" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Produk & Layanan</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="boxes" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Manajemen Stok</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Operasional</span>
+                    </li>
+
+                    <li>
+                        <a href="{{ route ('admin.admin.transactions.index') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="shopping-cart" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Transaksi / Pesanan</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="factory" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Status Produksi</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="truck" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Pengiriman & Resi</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="refresh-ccw" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Pengajuan Retur</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Finance & Report</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="file-text" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Invoice & Keuangan</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Laporan & Analitik</span>
+                        </a>
+                    </li>
+
+                    <li x-data="{ count: 0 }" 
+                        x-init="
+                            const fetchCount = () => {
+                                fetch('{{ url('/admin/chat/notifications') }}')
+                                    .then(res => res.json())
+                                    .then(data => count = data.count)
+                                    .catch(err => console.error('Notification error:', err));
+                            };
+                            fetchCount();
+                            setInterval(fetchCount, 30000);
+                        ">
+                        <a href="{{ route('admin.chat.index') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('admin.chat.*') ? 'bg-navy-800 text-lime-400' : '' }}">
+                            <i data-lucide="bot" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Chatbot Config</span>
+                            <template x-if="count > 0">
+                                <span class="inline-flex items-center justify-center w-5 h-5 p-1 ms-3 text-[10px] font-bold text-white bg-red-500 rounded-full animate-pulse" x-text="count"></span>
+                            </template>
+                        </a>
+                    </li>
+                @endif
+
+                @if(auth()->user()->isManajemen())
+
+                    <li>
+                        <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-white rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('dashboard') ? 'bg-navy-800 text-lime-400' : '' }}">
+                            <i data-lucide="pie-chart" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="ms-3">Executive Dashboard</span>
+                        </a>
+                    </li>
+                    
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Keuangan & Laporan</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="trending-up" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Tren Pendapatan</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="banknote" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Laporan Penjualan</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Intelijen Bisnis</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Performa Produk</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="users" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Statistik Pelanggan</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Audit & Evaluasi</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="timer" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Efisiensi Produksi</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="alert-circle" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Tingkat Retur</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Akun</span>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="user" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Profil Saya</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if(auth()->user()->isProduksi())
+
+                    <li>
+                        <a href="{{ route('dashboard') }}" class="flex items-center p-2 text-white rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('dashboard') ? 'bg-navy-800 text-lime-400' : '' }}">
+                            <i data-lucide="activity" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="ms-3">Dashboard Produksi</span>
+                        </a>
+                    </li>
+                    
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Tahapan Produksi</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="printer" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Antrean Cetak</span>
+                            <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-bold text-navy-950 bg-red-400 rounded-full">3</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="scissors" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Proses Jahit</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="clipboard-check" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Quality Control</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="package-check" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Siap Kirim</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Inventory & Bahan</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="layers" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Stok Bahan Baku</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="box" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Stok Barang Jadi</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Akun</span>
+                    </li>
+                    
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="user" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Profil Saya</span>
+                        </a>
+                    </li>   
+                @endif
+
+                @if(auth()->user()->isPelanggan())
+                
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Aktivitas Belanja</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="shopping-bag" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Katalog Produk</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="package-search" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Pesanan Saya</span>
+                            <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-bold text-navy-950 bg-lime-400 rounded-full">1</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="file-text" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Invoice & Riwayat</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Bantuan & Layanan</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="refresh-ccw" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Ajukan Retur</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="message-circle" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Pusat Bantuan</span>
+                        </a>
+                    </li>
+
+                    <li class="pt-4 mt-4 space-y-2 border-t border-slate-800">
+                        <span class="px-2 text-xs font-bold text-slate-500 uppercase tracking-wider">Akun Saya</span>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                            <i data-lucide="user-cog" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
+                            <span class="flex-1 ms-3 whitespace-nowrap">Edit Profil</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
     </aside>
 
-    <div class="px-6 py-6 sm:ml-64 mt-16 min-h-screen">
-    @yield('content')
-</div>
-
-    <!-- Global Loader Overlay -->
-    <div id="global-loader" class="hidden">
-        <div class="loader-container">
-            <div class="spinner"></div>
-            <p class="loader-text">Sedang memproses...</p>
-        </div>
+    <div class="p-4 sm:ml-64 mt-14">
+        @yield('content')
     </div>
 
-</div>
     <script>
         lucide.createIcons();
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const loader = document.getElementById('global-loader');
-
-            // 1. Munculkan loader saat form dikirim (Submit)
-            document.addEventListener('submit', function(e) {
-                loader.classList.remove('hidden');
-            });
-
-            // 2. Munculkan loader saat berpindah halaman (Klik Link)
-            document.addEventListener('click', function(e) {
-                const link = e.target.closest('a');
-                if (link && 
-                    link.href && 
-                    !link.hash && 
-                    link.target !== '_blank' && 
-                    !link.getAttribute('download') &&
-                    link.getAttribute('href') !== '#' &&
-                    link.href.startsWith(window.location.origin)) {
-                    loader.classList.remove('hidden');
-                }
-            });
-
-            // 3. Sembunyikan loader jika user kembali menggunakan tombol 'Back' browser
-            window.addEventListener('pageshow', function(event) {
-                if (event.persisted) {
-                    loader.classList.add('hidden');
-                }
-            });
-        });
     </script>
+
+    @unless(auth()->check() && auth()->user()->isAdmin())
+    <!-- Chatbot Widget -->
+    <div id="chat-widget"></div>
+    @endunless
+
+    @vite(['resources/js/app.jsx'])
 </body>
 </html>

@@ -4,9 +4,6 @@
 body { font-family: 'Inter', sans-serif; }
 h1, h2, h3, .font-display { font-family: 'Montserrat', sans-serif; }
 
-/* AlpineJS Cloak */
-[x-cloak] { display: none !important; }
-
 /* Custom Scrollbar */
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: #020617; }
@@ -30,7 +27,6 @@ h1, h2, h3, .font-display { font-family: 'Montserrat', sans-serif; }
 /* Text Gradient */
 .text-gradient {
     background: linear-gradient(to right, #a3e635, #22d3ee);
-    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -46,55 +42,4 @@ body.login-backdrop {
     background: rgba(15, 23, 42, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-
-/* Global Loader Overlay */
-#global-loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(2, 6, 23, 0.85); /* Navy-950 dengan transparansi */
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
-}
-
-#global-loader.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.loader-container {
-    text-align: center;
-    color: #ffffff;
-}
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid rgba(163, 230, 53, 0.1); /* Lime-400 transparan */
-    border-top: 4px solid #a3e635; /* Lime-400 solid */
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 15px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.loader-text {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: #a3e635;
 }

@@ -1,4 +1,6 @@
-@extends('layouts.app')
+
+
+    @extends('layouts.app')
 
 @section('title', 'The Future of Custom Sportswear')
 
@@ -33,7 +35,7 @@
                     </p>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" data-aos="fade-up" data-aos-delay="300">
-                        <a href="http://becksapparel.test/my/design/1" class="px-8 py-5 bg-lime-400 hover:bg-lime-500 text-navy-950 text-lg font-black rounded-xl transition transform hover:scale-105 shadow-[0_0_30px_rgba(163,230,53,0.3)] flex items-center justify-center gap-3">
+                        <a href="#" class="px-8 py-5 bg-lime-400 hover:bg-lime-500 text-navy-950 text-lg font-black rounded-xl transition transform hover:scale-105 shadow-[0_0_30px_rgba(163,230,53,0.3)] flex items-center justify-center gap-3">
                             <i data-lucide="palette"></i> MULAI DESAIN
                         </a>
                         <a href="#" class="px-8 py-5 glass hover:bg-white/5 text-white text-lg font-bold rounded-xl transition border border-white/10 flex items-center justify-center gap-3 group">
