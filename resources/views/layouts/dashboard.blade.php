@@ -9,6 +9,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        window.BASE_URL = "{{ url('/') }}";
         tailwind.config = {
             theme: {
                 extend: {
@@ -173,10 +174,23 @@
                         </a>
                     </li>
 
-                    <li>
-                        <a href="#" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group">
+                    <li x-data="{ count: 0 }" 
+                        x-init="
+                            const fetchCount = () => {
+                                fetch('{{ url('/admin/chat/notifications') }}')
+                                    .then(res => res.json())
+                                    .then(data => count = data.count)
+                                    .catch(err => console.error('Notification error:', err));
+                            };
+                            fetchCount();
+                            setInterval(fetchCount, 30000);
+                        ">
+                        <a href="{{ route('admin.chat.index') }}" class="flex items-center p-2 text-slate-300 rounded-lg hover:bg-navy-800 hover:text-lime-400 group {{ Request::routeIs('admin.chat.*') ? 'bg-navy-800 text-lime-400' : '' }}">
                             <i data-lucide="bot" class="w-5 h-5 transition duration-75 group-hover:text-lime-400"></i>
                             <span class="flex-1 ms-3 whitespace-nowrap">Chatbot Config</span>
+                            <template x-if="count > 0">
+                                <span class="inline-flex items-center justify-center w-5 h-5 p-1 ms-3 text-[10px] font-bold text-white bg-red-500 rounded-full animate-pulse" x-text="count"></span>
+                            </template>
                         </a>
                     </li>
                 @endif
@@ -395,5 +409,12 @@
     <script>
         lucide.createIcons();
     </script>
+
+    @unless(auth()->check() && auth()->user()->isAdmin())
+    <!-- Chatbot Widget -->
+    <div id="chat-widget"></div>
+    @endunless
+
+    @vite(['resources/js/app.jsx'])
 </body>
 </html>

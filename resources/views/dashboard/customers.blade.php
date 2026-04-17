@@ -140,7 +140,7 @@
                 </div>
                 <h4 class="font-bold text-white mb-2">Butuh Bantuan?</h4>
                 <p class="text-sm text-slate-400 mb-4">CS kami atau Chatbot Becks siap membantumu 24/7.</p>
-                <button class="w-full border border-slate-600 hover:bg-navy-800 text-slate-300 font-bold py-2 rounded-lg text-sm transition flex items-center justify-center gap-2">
+                <button onclick="window.dispatchEvent(new Event('open-becks-chat'))" class="w-full border border-slate-600 hover:bg-navy-800 text-slate-300 font-bold py-2 rounded-lg text-sm transition flex items-center justify-center gap-2">
                     <i data-lucide="message-square" class="w-4 h-4"></i> Hubungi CS
                 </button>
             </div>

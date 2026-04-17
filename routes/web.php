@@ -21,6 +21,11 @@ Route::view('/faq', 'faq')->name('faq');
 Route::view('/terms-and-conditions', 'terms')->name('terms.conditions');
 Route::view('/features/ai-design', 'features.ai-design')->name('ai.design');
 
+// 2.5 Chatbot Public Routes
+Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage']);
+Route::post('/chat/clear', [App\Http\Controllers\ChatController::class, 'clearChat'])->name('chat.clear');
+Route::get('/chat/messages', [App\Http\Controllers\ChatController::class, 'getMessages']);
+
 // 3. Gallery (Public)
 Route::get('/gallery', function () {
     $path = public_path('images/gallery');
@@ -54,6 +59,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['role:admin,pimpinan'])->prefix('admin')->name('admin.')->group(function () {
         Route::resource('users', AdminUserController::class);
         Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class);
+        
+        // Chat Admin Dashboard
+        Route::get('/chat', function() {
+            return view('admin.chat');
+        })->name('chat.index');
+        Route::get('/chat/sessions', [App\Http\Controllers\ChatController::class, 'adminSessions']);
+        Route::get('/chat/sessions/{session}', [App\Http\Controllers\ChatController::class, 'adminShowChat']);
+        Route::post('/chat/sessions/{session}/reply', [App\Http\Controllers\ChatController::class, 'adminReply']);
+        Route::post('/chat/sessions/{session}/toggle', [App\Http\Controllers\ChatController::class, 'toggleMode']);
+        Route::get('/chat/notifications', [App\Http\Controllers\ChatController::class, 'adminNotificationCount']);
+
         // Admin Transaction Routes
         Route::get('/transactions', [App\Http\Controllers\Admin\AdminTransactionController::class, 'index'])->name('admin.transactions.index');
         Route::get('/transactions/{order}', [App\Http\Controllers\Admin\AdminTransactionController::class, 'show'])->name('admin.transactions.show');

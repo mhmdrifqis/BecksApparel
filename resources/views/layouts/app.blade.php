@@ -12,6 +12,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        window.BASE_URL = "{{ url('/') }}";
         tailwind.config = {
             theme: {
                 extend: {
@@ -83,5 +84,12 @@
     @include('partials.footer')
     
     @include('partials.login-modal')
+    
+    @unless(auth()->check() && auth()->user()->isAdmin())
+    <!-- Chatbot Widget -->
+    <div id="chat-widget"></div>
+    @endunless
+
+    @vite(['resources/js/app.jsx'])
 </body>
 </html>
